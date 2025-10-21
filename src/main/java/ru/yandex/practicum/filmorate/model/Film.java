@@ -1,9 +1,13 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.util.DurationMinutesDeserializer;
+import ru.yandex.practicum.filmorate.util.DurationMinutesSerializer;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,6 +25,8 @@ public class Film {
 
     private LocalDate releaseDate;
 
+    @JsonSerialize(using = DurationMinutesSerializer.class)
+    @JsonDeserialize(using = DurationMinutesDeserializer.class)
     private Duration duration;
 
     private static final LocalDate CINEMA_BIRTHDAY = LocalDate.of(1895, 12, 28);
