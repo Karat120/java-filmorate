@@ -25,7 +25,7 @@ public class FilmController {
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
-        film.setId(lastGeneratedID++);
+        film.setId(++lastGeneratedID);
         films.put(film.getId(), film);
 
         log.info("Film created: id={}, name={}", film.getId(), film.getName());
