@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
@@ -73,15 +74,17 @@ class FilmTest {
     }
 
     @Test
-    void releaseDateBefore1895_shouldThrowValidationException() {
+    void releaseDateBefore1895_shouldFailValidation() {
         Film film = new Film();
         film.setName("Old film");
         film.setDescription("Description");
+        film.setReleaseDate(LocalDate.of(1800, 1, 1));
 
-        assertThatThrownBy(() ->
-                film.setReleaseDate(LocalDate.of(1800, 1, 1)))
-                .isInstanceOf(ValidationException.class)
-                .hasMessageContaining("earlier than December 28, 1895");
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+
+        assertThat(violations).isNotEmpty();
+        assertThat(violations.iterator().next().getMessage())
+                .contains("1895");
     }
 
     @Test
