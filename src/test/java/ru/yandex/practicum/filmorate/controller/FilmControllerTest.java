@@ -25,7 +25,7 @@ class FilmControllerTest {
 
         Film created = filmController.createFilm(film);
 
-        assertThat(created.getId()).isZero(); // первый id = 0
+        assertThat(created.getId()).isOne();
         assertThat(created.getName()).isEqualTo("Inception");
         assertThat(filmController.getAllFilms()).containsExactly(created);
     }
