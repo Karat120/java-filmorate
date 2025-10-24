@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
+import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -79,7 +80,7 @@ class FilmTest {
 
         assertThatThrownBy(() ->
                 film.setReleaseDate(LocalDate.of(1800, 1, 1)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("earlier than December 28, 1895");
     }
 
@@ -91,7 +92,7 @@ class FilmTest {
 
         assertThatThrownBy(() ->
                 film.setDuration(Duration.ofMinutes(-100)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("must be positive");
     }
 }

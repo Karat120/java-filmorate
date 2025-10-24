@@ -84,7 +84,6 @@ class UserTest {
         User user = new User();
         user.setLogin("charlie");
         user.setEmail("charlie@example.com");
-        user.setName(null);
 
         assertThat(user.getName()).isEqualTo(user.getLogin());
     }
