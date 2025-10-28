@@ -1,0 +1,55 @@
+package ru.yandex.practicum.filmorate.repository.impl;
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.repository.UserStorage;
+import ru.yandex.practicum.filmorate.util.IdGenerator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@Component
+@AllArgsConstructor
+public class InMemoryUserStorage implements UserStorage {
+    private final Map<Long, User> users = new HashMap<>();
+    private final IdGenerator<Long> idGenerator;
+
+    @Override
+    public User addUser(User user) {
+        user.setId(idGenerator.generate());
+        users.put(user.getId(), user);
+        return user;
+    }
+
+    @Override
+    public Optional<User> getUserById(Long id) {
+        return Optional.ofNullable(users.get(id));
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public User updateUser(User user) {
+        if (user.getId() == null || !users.containsKey(user.getId())) {
+            throw new UserNotFoundException();
+        }
+        users.put(user.getId(), user);
+        return user;
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        if (!users.containsKey(id)) {
+            throw new UserNotFoundException();
+        }
+        users.remove(id);
+    }
+}
