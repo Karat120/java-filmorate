@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 public class User {
@@ -26,10 +29,34 @@ public class User {
     @PastOrPresent(message = "Birthday cannot be in the future")
     private LocalDate birthday;
 
+    private Set<Long> friends = new HashSet<>();
+
     public void setLogin(String login) {
         this.login = login;
         if (this.name == null || this.name.isBlank()) {
             this.name = login;
         }
+    }
+
+    public void addFriend(Long otherUserId) {
+        if (Objects.equals(otherUserId, this.id)) {
+            throw new IllegalArgumentException("User cannot be a friend to himself");
+        }
+        if (friends.contains(otherUserId)) {
+            throw new IllegalArgumentException(
+                    "The user with id=%d is already a friend of the user with id=%d".formatted(otherUserId, this.id));
+        }
+        friends.add(otherUserId);
+    }
+
+    public void removeFriend(Long otherUserId) {
+        if (Objects.equals(otherUserId, this.id)) {
+            throw  new IllegalArgumentException("User cannot remove himself from the friends list");
+        }
+        if (!friends.contains(otherUserId)) {
+            throw new IllegalArgumentException(
+                    "The user with id=%d is not a friend of the user with id=%d".formatted(otherUserId, this.id));
+        }
+        friends.remove(otherUserId);
     }
 }
