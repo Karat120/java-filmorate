@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.repository.FilmStorage;
 import ru.yandex.practicum.filmorate.util.IdGenerator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,14 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public List<Film> getAllFilms() {
         return new ArrayList<>(films.values());
+    }
+
+    @Override
+    public List<Film> getTopNFilmsByLikes(int n) {
+        return films.values().stream()
+                .sorted(Comparator.comparingInt(Film::countLikes).reversed())
+                .limit(n)
+                .toList();
     }
 
     @Override
