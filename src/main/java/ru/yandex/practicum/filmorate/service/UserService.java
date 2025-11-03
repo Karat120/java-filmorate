@@ -90,7 +90,7 @@ public class UserService {
     }
 
     private boolean isFriendsInternal(User firstUser, User secondUser) {
-        return firstUser.getFriends().contains(secondUser.getId())
-                && secondUser.getFriends().contains(firstUser.getId());
+        return firstUser.hasFriend(secondUser.getId())
+                && secondUser.hasFriend(firstUser.getId());
     }
 }

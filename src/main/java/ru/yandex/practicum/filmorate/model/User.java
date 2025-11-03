@@ -38,11 +38,15 @@ public class User {
         }
     }
 
+    public boolean hasFriend(Long otherUserId) {
+        return friends.contains(otherUserId);
+    }
+
     public void addFriend(Long otherUserId) {
         if (Objects.equals(otherUserId, this.id)) {
             throw new IllegalArgumentException("User cannot be a friend to himself");
         }
-        if (friends.contains(otherUserId)) {
+        if (hasFriend(otherUserId)) {
             throw new IllegalArgumentException(
                     "The user with id=%d is already a friend of the user with id=%d".formatted(otherUserId, this.id));
         }
@@ -53,7 +57,7 @@ public class User {
         if (Objects.equals(otherUserId, this.id)) {
             throw  new IllegalArgumentException("User cannot remove himself from the friends list");
         }
-        if (!friends.contains(otherUserId)) {
+        if (!hasFriend(otherUserId)) {
             throw new IllegalArgumentException(
                     "The user with id=%d is not a friend of the user with id=%d".formatted(otherUserId, this.id));
         }
