@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.util.DurationMinutesSerializer;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 public class Film {
@@ -31,10 +32,36 @@ public class Film {
     @JsonDeserialize(using = DurationMinutesDeserializer.class)
     private Duration duration;
 
+    private Set<Long> userLikes;
+
     public void setDuration(Duration duration) {
         if (duration == null || duration.isNegative() || duration.isZero()) {
             throw new ValidationException("Film duration must be positive");
         }
         this.duration = duration;
+    }
+
+    public void likeFrom(Long userId) {
+        if (isLikedBy(userId)) {
+            throw new IllegalArgumentException(
+                    "User cannot like film more than one time");
+        }
+        userLikes.add(userId);
+    }
+
+    public void unlikeFrom(Long userId) {
+        if (!isLikedBy(userId)) {
+            throw new IllegalArgumentException(
+                    "Cannot unlike a film that was not liked");
+        }
+        userLikes.remove(userId);
+    }
+
+    public boolean isLikedBy(Long userId) {
+        return userLikes.contains(userId);
+    }
+
+    public int countLikes() {
+        return userLikes.size();
     }
 }
