@@ -25,7 +25,9 @@ public class UserService {
     public List<User> getAll() {
         return userStorage.getAll();
     }
-
+    public List<User> getAllByIds(List<Long> ids) {
+        return userStorage.getAllByIds(ids);
+    }
     public User update(User user) {
         return userStorage.update(user);
     }
