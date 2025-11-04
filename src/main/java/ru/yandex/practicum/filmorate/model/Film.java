@@ -36,7 +36,7 @@ public class Film {
 
     private Set<Long> userLikes = new HashSet<>();
 
-    public void likeFrom(Long userId) {
+    public void likeBy(Long userId) {
         if (isLikedBy(userId)) {
             throw new IllegalArgumentException(
                     "User cannot like film more than one time");
@@ -44,7 +44,7 @@ public class Film {
         userLikes.add(userId);
     }
 
-    public void unlikeFrom(Long userId) {
+    public void unlikeBy(Long userId) {
         if (!isLikedBy(userId)) {
             throw new IllegalArgumentException(
                     "Cannot unlike a film that was not liked");
