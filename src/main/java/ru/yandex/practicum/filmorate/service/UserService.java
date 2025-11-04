@@ -77,6 +77,10 @@ public class UserService {
         return isFriendsInternal(firstUser, secondUser);
     }
 
+    public boolean existsById(Long id) {
+        return userStorage.existsById(id);
+    }
+
     private void becomeFriendsInternal(User firstUser, User secondUser) {
         if (isFriendsInternal(firstUser, secondUser)) {
             throw new FriendshipViolationException("Users is already friends");
