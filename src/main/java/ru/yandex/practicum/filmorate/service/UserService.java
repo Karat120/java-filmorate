@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.FriendshipViolationException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.UserStorage;
@@ -78,7 +79,7 @@ public class UserService {
 
     private void becomeFriendsInternal(User firstUser, User secondUser) {
         if (isFriendsInternal(firstUser, secondUser)) {
-            throw new IllegalStateException("Users is already friends");
+            throw new FriendshipViolationException("Users is already friends");
         }
 
         firstUser.addFriend(secondUser.getId());
@@ -90,7 +91,7 @@ public class UserService {
 
     private void breakFriendshipInternal(User firstUser, User secondUser) {
         if (!isFriendsInternal(firstUser, secondUser)) {
-            throw new IllegalStateException("Users must be friends to break friendship");
+            throw new FriendshipViolationException("Users must be friends to break friendship");
         }
 
         firstUser.removeFriend(secondUser.getId());

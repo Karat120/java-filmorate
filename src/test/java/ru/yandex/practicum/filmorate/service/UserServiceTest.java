@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.yandex.practicum.filmorate.exception.FriendshipViolationException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.UserStorage;
@@ -112,7 +113,7 @@ class UserServiceTest {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
-        assertThrows(IllegalStateException.class, () -> userService.becomeFriends(1L, 2L));
+        assertThrows(FriendshipViolationException.class, () -> userService.becomeFriends(1L, 2L));
     }
 
     @Test
@@ -134,7 +135,7 @@ class UserServiceTest {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
-        assertThrows(IllegalStateException.class, () -> userService.breakFriendship(1L, 2L));
+        assertThrows(FriendshipViolationException.class, () -> userService.breakFriendship(1L, 2L));
     }
 
     @Test
