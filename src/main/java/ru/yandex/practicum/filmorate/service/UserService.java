@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.UserStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,9 +26,11 @@ public class UserService {
     public List<User> getAll() {
         return userStorage.getAll();
     }
+
     public List<User> getAllByIds(List<Long> ids) {
         return userStorage.getAllByIds(ids);
     }
+
     public User update(User user) {
         return userStorage.update(user);
     }
@@ -52,6 +55,11 @@ public class UserService {
         var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
 
         breakFriendshipInternal(firstUser, secondUser);
+    }
+
+    public List<User> getFriends(Long id) {
+        List<Long> friendIds = new ArrayList<>(getById(id).getFriends());
+        return getAllByIds(friendIds);
     }
 
     public List<User> getMutualFriends(Long firstUserId, Long secondUserId) {
