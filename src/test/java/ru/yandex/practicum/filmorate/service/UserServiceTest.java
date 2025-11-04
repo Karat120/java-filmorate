@@ -45,40 +45,40 @@ class UserServiceTest {
 
     @Test
     void create_shouldDelegateToStorage() {
-        when(userStorage.addUser(user1)).thenReturn(user1);
+        when(userStorage.add(user1)).thenReturn(user1);
 
         var created = userService.create(user1);
 
         assertEquals(1L, user1.getId());
         assertEquals(user1, created);
 
-        verify(userStorage).addUser(user1);
+        verify(userStorage).add(user1);
     }
 
     @Test
     void getById_shouldReturnUserIfExists() {
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
 
         var result = userService.getById(1L);
 
         assertEquals(user1, result);
-        verify(userStorage).getUserById(1L);
+        verify(userStorage).getById(1L);
     }
 
     @Test
     void getById_shouldThrowIfNotFound() {
-        when(userStorage.getUserById(99L)).thenReturn(Optional.empty());
+        when(userStorage.getById(99L)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.getById(99L));
     }
 
     @Test
     void update_shouldDelegateToStorage() {
-        when(userStorage.updateUser(user1)).thenReturn(user1);
+        when(userStorage.update(user1)).thenReturn(user1);
 
         var updated = userService.update(user1);
 
         assertEquals(user1, updated);
-        verify(userStorage).updateUser(user1);
+        verify(userStorage).update(user1);
     }
 
     @Test
@@ -87,21 +87,21 @@ class UserServiceTest {
 
         userService.delete(user1);
 
-        verify(userStorage).deleteUser(1L);
+        verify(userStorage).delete(1L);
     }
 
     @Test
     void becomeFriends_shouldUpdateBothUsers() {
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getUserById(2L)).thenReturn(Optional.of(user2));
-        when(userStorage.updateUser(any())).thenAnswer(inv -> inv.getArgument(0));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
+        when(userStorage.update(any())).thenAnswer(inv -> inv.getArgument(0));
 
         userService.becomeFriends(1L, 2L);
 
         assertTrue(user1.getFriends().contains(2L));
         assertTrue(user2.getFriends().contains(1L));
 
-        verify(userStorage, times(2)).updateUser(any());
+        verify(userStorage, times(2)).update(any());
     }
 
     @Test
@@ -109,8 +109,8 @@ class UserServiceTest {
         user1.addFriend(2L);
         user2.addFriend(1L);
 
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getUserById(2L)).thenReturn(Optional.of(user2));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
         assertThrows(IllegalStateException.class, () -> userService.becomeFriends(1L, 2L));
     }
@@ -120,8 +120,8 @@ class UserServiceTest {
         user1.addFriend(2L);
         user2.addFriend(1L);
 
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getUserById(2L)).thenReturn(Optional.of(user2));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
         userService.breakFriendship(1L, 2L);
 
@@ -131,8 +131,8 @@ class UserServiceTest {
 
     @Test
     void breakFriendship_shouldThrowIfNotFriends() {
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getUserById(2L)).thenReturn(Optional.of(user2));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
         assertThrows(IllegalStateException.class, () -> userService.breakFriendship(1L, 2L));
     }
@@ -145,9 +145,9 @@ class UserServiceTest {
         user1.addFriend(3L);
         user2.addFriend(3L);
 
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getUserById(2L)).thenReturn(Optional.of(user2));
-        when(userStorage.getUserById(3L)).thenReturn(Optional.of(user3));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
+        when(userStorage.getById(3L)).thenReturn(Optional.of(user3));
 
         var mutual = userService.getMutualFriends(1L, 2L);
 
@@ -159,8 +159,8 @@ class UserServiceTest {
         user1.addFriend(2L);
         user2.addFriend(1L);
 
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getUserById(2L)).thenReturn(Optional.of(user2));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
         assertTrue(userService.isFriends(1L, 2L));
     }
@@ -169,8 +169,8 @@ class UserServiceTest {
     void isFriends_shouldReturnFalseIfOneSided() {
         user1.addFriend(2L);
 
-        when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getUserById(2L)).thenReturn(Optional.of(user2));
+        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
+        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
         assertFalse(userService.isFriends(1L, 2L));
     }

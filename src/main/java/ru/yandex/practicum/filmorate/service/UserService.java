@@ -15,53 +15,53 @@ public class UserService {
     private final UserStorage userStorage;
 
     public User create(User user) {
-        return userStorage.addUser(user);
+        return userStorage.add(user);
     }
 
     public User getById(Long id) {
-        return userStorage.getUserById(id).orElseThrow(UserNotFoundException::new);
+        return userStorage.getById(id).orElseThrow(UserNotFoundException::new);
     }
 
     public List<User> getAll() {
-        return userStorage.getAllUsers();
+        return userStorage.getAll();
     }
 
     public User update(User user) {
-        return userStorage.updateUser(user);
+        return userStorage.update(user);
     }
 
     public void deleteById(Long id) {
-        userStorage.deleteUser(id);
+        userStorage.delete(id);
     }
 
     public void delete(User user) {
-        userStorage.deleteUser(user.getId());
+        userStorage.delete(user.getId());
     }
 
     public void becomeFriends(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getUserById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getUserById(secondUserId).orElseThrow(UserNotFoundException::new);
+        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
+        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
 
         becomeFriendsInternal(firstUser, secondUser);
     }
 
     public void breakFriendship(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getUserById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getUserById(secondUserId).orElseThrow(UserNotFoundException::new);
+        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
+        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
 
         breakFriendshipInternal(firstUser, secondUser);
     }
 
     public List<User> getMutualFriends(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getUserById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getUserById(secondUserId).orElseThrow(UserNotFoundException::new);
+        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
+        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
 
         return getMutualFriendsInternal(firstUser, secondUser);
     }
 
     public boolean isFriends(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getUserById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getUserById(secondUserId).orElseThrow(UserNotFoundException::new);
+        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
+        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
 
         return isFriendsInternal(firstUser, secondUser);
     }
@@ -74,8 +74,8 @@ public class UserService {
         firstUser.addFriend(secondUser.getId());
         secondUser.addFriend(firstUser.getId());
 
-        userStorage.updateUser(firstUser);
-        userStorage.updateUser(secondUser);
+        userStorage.update(firstUser);
+        userStorage.update(secondUser);
     }
 
     private void breakFriendshipInternal(User firstUser, User secondUser) {
@@ -89,7 +89,7 @@ public class UserService {
 
     private List<User> getMutualFriendsInternal(User firstUser, User secondUser) {
         return Sets.intersection(firstUser.getFriends(), secondUser.getFriends()).stream()
-                .map(id -> userStorage.getUserById(id).orElseThrow(UserNotFoundException::new))
+                .map(id -> userStorage.getById(id).orElseThrow(UserNotFoundException::new))
                 .toList();
     }
 
