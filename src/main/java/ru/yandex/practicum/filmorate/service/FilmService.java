@@ -15,23 +15,23 @@ public class FilmService {
 
     private final FilmStorage filmStorage;
 
-    public Film createFilm(Film film) {
+    public Film create(Film film) {
         return filmStorage.addFilm(film);
     }
 
-    public Film getFilmById(Long id) {
+    public Film getById(Long id) {
         return filmStorage.getFilmById(id).orElseThrow(FilmNotFoundException::new);
     }
 
-    public List<Film> getAllFilms() {
+    public List<Film> getAll() {
         return filmStorage.getAllFilms();
     }
 
-    public Film updateFilm(Film film) {
+    public Film update(Film film) {
         return filmStorage.updateFilm(film);
     }
 
-    public void deleteFilm(Film film) {
+    public void delete(Film film) {
         filmStorage.deleteFilm(film.getId());
     }
 

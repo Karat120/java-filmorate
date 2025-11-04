@@ -37,10 +37,10 @@ class FilmServiceTest {
     }
 
     @Test
-    void createFilm_shouldDelegateToStorage() {
+    void create_shouldDelegateToStorage() {
         when(filmStorage.addFilm(film)).thenReturn(film);
 
-        var created = filmService.createFilm(film);
+        var created = filmService.create(film);
 
         assertEquals(1L, film.getId());
         assertEquals(film, created);
@@ -49,26 +49,26 @@ class FilmServiceTest {
     }
 
     @Test
-    void getFilmById_shouldReturnFilmIfExists() {
+    void getById_shouldReturnFilmIfExists() {
         when(filmStorage.getFilmById(1L)).thenReturn(Optional.of(film));
 
-        var result = filmService.getFilmById(1L);
+        var result = filmService.getById(1L);
 
         assertEquals(film, result);
         verify(filmStorage).getFilmById(1L);
     }
 
     @Test
-    void getFIlmById_shouldThrowIfNotFound() {
+    void getById_shouldThrowIfNotFound() {
         when(filmStorage.getFilmById(99L)).thenReturn(Optional.empty());
-        assertThrows(FilmNotFoundException.class, () -> filmService.getFilmById(99L));
+        assertThrows(FilmNotFoundException.class, () -> filmService.getById(99L));
     }
 
     @Test
-    void getAllFilms_shouldDelegateToStorage() {
+    void getAll_shouldDelegateToStorage() {
         when(filmStorage.getAllFilms()).thenReturn(List.of(film));
 
-        var films = filmService.getAllFilms();
+        var films = filmService.getAll();
 
         assertEquals(1, films.size());
         assertEquals(film, films.get(0));
@@ -76,20 +76,20 @@ class FilmServiceTest {
     }
 
     @Test
-    void updateFilm_shouldDelegateToStorage() {
+    void update_shouldDelegateToStorage() {
         when(filmStorage.updateFilm(film)).thenReturn(film);
 
-        var updated = filmService.updateFilm(film);
+        var updated = filmService.update(film);
 
         assertEquals(film, updated);
         verify(filmStorage).updateFilm(film);
     }
 
     @Test
-    void deleteFilm_shouldDelegateToStorage() {
+    void delete_shouldDelegateToStorage() {
         film.setId(5L);
 
-        filmService.deleteFilm(film);
+        filmService.delete(film);
 
         verify(filmStorage).deleteFilm(5L);
     }
