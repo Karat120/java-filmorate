@@ -99,7 +99,7 @@ class FilmServiceTest {
         var topFilms = List.of(film);
         when(filmStorage.getTopNFilmsByLikes(10)).thenReturn(topFilms);
 
-        var result = filmService.getTopTenFilmsByLikes();
+        var result = filmService.getTopNFilmsByLikes(10);
 
         assertEquals(topFilms, result);
         verify(filmStorage).getTopNFilmsByLikes(10);

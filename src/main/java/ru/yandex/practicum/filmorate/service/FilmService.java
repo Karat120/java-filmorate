@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class FilmService {
-    private static final int TOP_FILMS_COUNT = 10;
 
     private final FilmStorage filmStorage;
 
@@ -39,7 +38,7 @@ public class FilmService {
         filmStorage.delete(id);
     }
 
-    public List<Film> getTopTenFilmsByLikes() {
-        return filmStorage.getTopNFilmsByLikes(TOP_FILMS_COUNT);
+    public List<Film> getTopNFilmsByLikes(int n) {
+        return filmStorage.getTopNFilmsByLikes(n);
     }
 }
