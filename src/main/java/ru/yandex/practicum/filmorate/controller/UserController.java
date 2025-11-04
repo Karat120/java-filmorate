@@ -24,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
+    public User create(@Valid @RequestBody User user) {
         userService.create(user);
 
         log.info("User created: id={}, email={}, login={}", user.getId(), user.getEmail(), user.getLogin());
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         var users = userService.getAll();
 
         log.debug("Retrieving all users (total={})", users.size());
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@Valid @RequestBody User user) {
+    public User update(@Valid @RequestBody User user) {
         userService.update(user);
 
         log.info("User updated: id={}, email={}, login={}", user.getId(), user.getEmail(), user.getLogin());
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         userService.deleteById(id);
 
         log.info("User deleted: id={}", id);
