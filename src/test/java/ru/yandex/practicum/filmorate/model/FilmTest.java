@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
-import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FilmTest {
 
@@ -84,17 +82,5 @@ class FilmTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations.iterator().next().getMessage())
                 .contains("1895");
-    }
-
-    @Test
-    void negativeDuration_shouldThrowValidationException() {
-        Film film = new Film();
-        film.setName("Movie");
-        film.setDescription("Desc");
-
-        assertThatThrownBy(() ->
-                film.setDuration(Duration.ofMinutes(-100)))
-                .isInstanceOf(ValidationException.class)
-                .hasMessageContaining("must be positive");
     }
 }

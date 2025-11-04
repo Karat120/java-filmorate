@@ -2,11 +2,11 @@ package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.annotation.NotBeforeCinemaBirthday;
+import ru.yandex.practicum.filmorate.annotation.PositiveDuration;
 import ru.yandex.practicum.filmorate.util.DurationMinutesDeserializer;
 import ru.yandex.practicum.filmorate.util.DurationMinutesSerializer;
 
@@ -30,16 +30,10 @@ public class Film {
 
     @JsonSerialize(using = DurationMinutesSerializer.class)
     @JsonDeserialize(using = DurationMinutesDeserializer.class)
+    @PositiveDuration
     private Duration duration;
 
     private Set<Long> userLikes;
-
-    public void setDuration(Duration duration) {
-        if (duration == null || duration.isNegative() || duration.isZero()) {
-            throw new ValidationException("Film duration must be positive");
-        }
-        this.duration = duration;
-    }
 
     public void likeFrom(Long userId) {
         if (isLikedBy(userId)) {
