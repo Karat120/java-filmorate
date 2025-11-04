@@ -14,27 +14,27 @@ import java.util.List;
 public class UserService {
     private final UserStorage userStorage;
 
-    public User createUser(User user) {
+    public User create(User user) {
         return userStorage.addUser(user);
     }
 
-    public User getUserById(Long id) {
+    public User getById(Long id) {
         return userStorage.getUserById(id).orElseThrow(UserNotFoundException::new);
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         return userStorage.getAllUsers();
     }
 
-    public User updateUser(User user) {
+    public User update(User user) {
         return userStorage.updateUser(user);
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteById(Long id) {
         userStorage.deleteUser(id);
     }
 
-    public void deleteUser(User user) {
+    public void delete(User user) {
         userStorage.deleteUser(user.getId());
     }
 

@@ -44,10 +44,10 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser_shouldDelegateToStorage() {
+    void create_shouldDelegateToStorage() {
         when(userStorage.addUser(user1)).thenReturn(user1);
 
-        var created = userService.createUser(user1);
+        var created = userService.create(user1);
 
         assertEquals(1L, user1.getId());
         assertEquals(user1, created);
@@ -56,36 +56,36 @@ class UserServiceTest {
     }
 
     @Test
-    void getUserById_shouldReturnUserIfExists() {
+    void getById_shouldReturnUserIfExists() {
         when(userStorage.getUserById(1L)).thenReturn(Optional.of(user1));
 
-        var result = userService.getUserById(1L);
+        var result = userService.getById(1L);
 
         assertEquals(user1, result);
         verify(userStorage).getUserById(1L);
     }
 
     @Test
-    void getUserById_shouldThrowIfNotFound() {
+    void getById_shouldThrowIfNotFound() {
         when(userStorage.getUserById(99L)).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> userService.getUserById(99L));
+        assertThrows(UserNotFoundException.class, () -> userService.getById(99L));
     }
 
     @Test
-    void updateUser_shouldDelegateToStorage() {
+    void update_shouldDelegateToStorage() {
         when(userStorage.updateUser(user1)).thenReturn(user1);
 
-        var updated = userService.updateUser(user1);
+        var updated = userService.update(user1);
 
         assertEquals(user1, updated);
         verify(userStorage).updateUser(user1);
     }
 
     @Test
-    void deleteUser_shouldDelegateToStorage() {
+    void delete_shouldDelegateToStorage() {
         user1.setId(1L);
 
-        userService.deleteUser(user1);
+        userService.delete(user1);
 
         verify(userStorage).deleteUser(1L);
     }
