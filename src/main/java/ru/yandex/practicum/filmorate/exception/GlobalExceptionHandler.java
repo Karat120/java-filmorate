@@ -30,6 +30,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserAlreadyLikedException.class)
+    public ResponseEntity<Map<String, String>> handleUserAlreadyLikedException(UserAlreadyLikedException ex) {
+        log.warn("User already liked the film: {}", ex.getMessage());
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage() != null ? ex.getMessage() : "User already liked this film");
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserHasNotLikedException.class)
+    public ResponseEntity<Map<String, String>> handleUserHasNotLikedException(UserHasNotLikedException ex) {
+        log.warn("User has not liked the film: {}", ex.getMessage());
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage() != null ? ex.getMessage() : "User has not liked this film");
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(FilmNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleFilmNotFoundException(FilmNotFoundException ex) {
         log.warn("Film not found: {}", ex.getMessage());

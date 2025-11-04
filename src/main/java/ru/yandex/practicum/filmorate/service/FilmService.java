@@ -3,6 +3,9 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.UserAlreadyLikedException;
+import ru.yandex.practicum.filmorate.exception.UserHasNotLikedException;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmStorage;
 
@@ -13,6 +16,7 @@ import java.util.List;
 public class FilmService {
 
     private final FilmStorage filmStorage;
+    private final UserService userService;
 
     public Film create(Film film) {
         return filmStorage.add(film);
@@ -55,10 +59,19 @@ public class FilmService {
     }
 
     private void likeInternal(Film film, Long userId) {
+        if (!userService.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+        if (film.isLikedBy(userId)) {
+            throw new UserAlreadyLikedException("User with ID " + userId + " has already liked this film.");
+        }
         film.likeBy(userId);
     }
 
     private void unlikeInternal(Film film, Long userId) {
+        if (!film.isLikedBy(userId)) {
+            throw new UserHasNotLikedException("User with ID " + userId + " has not liked this film.");
+        }
         film.unlikeBy(userId);
     }
 }
