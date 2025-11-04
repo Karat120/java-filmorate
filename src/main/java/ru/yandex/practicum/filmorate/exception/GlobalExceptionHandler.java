@@ -37,6 +37,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(FriendshipViolationException.class)
+    public ResponseEntity<Map<String, String>> handleFriendshipViolationException(FriendshipViolationException ex) {
+        log.warn("Friendship violation: {}", ex.getMessage());
+
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage() != null ? ex.getMessage() : "Users must be friends to perform this action");
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
     // Для любых неожиданных ошибок
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleOtherExceptions(Exception ex) {
