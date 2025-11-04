@@ -38,51 +38,51 @@ class FilmServiceTest {
 
     @Test
     void create_shouldDelegateToStorage() {
-        when(filmStorage.addFilm(film)).thenReturn(film);
+        when(filmStorage.add(film)).thenReturn(film);
 
         var created = filmService.create(film);
 
         assertEquals(1L, film.getId());
         assertEquals(film, created);
 
-        verify(filmStorage).addFilm(film);
+        verify(filmStorage).add(film);
     }
 
     @Test
     void getById_shouldReturnFilmIfExists() {
-        when(filmStorage.getFilmById(1L)).thenReturn(Optional.of(film));
+        when(filmStorage.getById(1L)).thenReturn(Optional.of(film));
 
         var result = filmService.getById(1L);
 
         assertEquals(film, result);
-        verify(filmStorage).getFilmById(1L);
+        verify(filmStorage).getById(1L);
     }
 
     @Test
     void getById_shouldThrowIfNotFound() {
-        when(filmStorage.getFilmById(99L)).thenReturn(Optional.empty());
+        when(filmStorage.getById(99L)).thenReturn(Optional.empty());
         assertThrows(FilmNotFoundException.class, () -> filmService.getById(99L));
     }
 
     @Test
     void getAll_shouldDelegateToStorage() {
-        when(filmStorage.getAllFilms()).thenReturn(List.of(film));
+        when(filmStorage.getAll()).thenReturn(List.of(film));
 
         var films = filmService.getAll();
 
         assertEquals(1, films.size());
         assertEquals(film, films.get(0));
-        verify(filmStorage).getAllFilms();
+        verify(filmStorage).getAll();
     }
 
     @Test
     void update_shouldDelegateToStorage() {
-        when(filmStorage.updateFilm(film)).thenReturn(film);
+        when(filmStorage.update(film)).thenReturn(film);
 
         var updated = filmService.update(film);
 
         assertEquals(film, updated);
-        verify(filmStorage).updateFilm(film);
+        verify(filmStorage).update(film);
     }
 
     @Test
@@ -91,7 +91,7 @@ class FilmServiceTest {
 
         filmService.delete(film);
 
-        verify(filmStorage).deleteFilm(5L);
+        verify(filmStorage).delete(5L);
     }
 
     @Test

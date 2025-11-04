@@ -16,23 +16,23 @@ public class FilmService {
     private final FilmStorage filmStorage;
 
     public Film create(Film film) {
-        return filmStorage.addFilm(film);
+        return filmStorage.add(film);
     }
 
     public Film getById(Long id) {
-        return filmStorage.getFilmById(id).orElseThrow(FilmNotFoundException::new);
+        return filmStorage.getById(id).orElseThrow(FilmNotFoundException::new);
     }
 
     public List<Film> getAll() {
-        return filmStorage.getAllFilms();
+        return filmStorage.getAll();
     }
 
     public Film update(Film film) {
-        return filmStorage.updateFilm(film);
+        return filmStorage.update(film);
     }
 
     public void delete(Film film) {
-        filmStorage.deleteFilm(film.getId());
+        filmStorage.delete(film.getId());
     }
 
     public List<Film> getTopTenFilmsByLikes() {
