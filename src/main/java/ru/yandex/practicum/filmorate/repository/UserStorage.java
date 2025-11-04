@@ -12,6 +12,8 @@ public interface UserStorage {
 
     List<User> getAll();
 
+    List<User> getAllByIds(List<Long> ids);
+
     User update(User user);
 
     void delete(Long id);

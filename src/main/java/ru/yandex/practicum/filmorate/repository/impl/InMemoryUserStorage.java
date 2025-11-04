@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,6 +35,14 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<User> getAll() {
         return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public List<User> getAllByIds(List<Long> ids) {
+        var idsSet = new HashSet<>(ids);
+        return users.values().stream()
+                .filter(user -> idsSet.contains(user.getId()))
+                .toList();
     }
 
     @Override
