@@ -55,7 +55,7 @@ public class User {
 
     public void removeFriend(Long otherUserId) {
         if (Objects.equals(otherUserId, this.id)) {
-            throw  new IllegalArgumentException("User cannot remove himself from the friends list");
+            throw new IllegalArgumentException("User cannot remove himself from the friends list");
         }
         if (!hasFriend(otherUserId)) {
             throw new IllegalArgumentException(
