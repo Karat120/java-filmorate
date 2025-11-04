@@ -41,4 +41,24 @@ public class FilmService {
     public List<Film> getTopNFilmsByLikes(int n) {
         return filmStorage.getTopNFilmsByLikes(n);
     }
+
+    public void like(Long filmId, Long likedById) {
+        var film = filmStorage.getById(filmId).orElseThrow(FilmNotFoundException::new);
+
+        likeInternal(film, likedById);
+    }
+
+    public void unlike(Long filmId, Long userId) {
+        var film = filmStorage.getById(filmId).orElseThrow(FilmNotFoundException::new);
+
+        unlikeInternal(film, userId);
+    }
+
+    private void likeInternal(Film film, Long userId) {
+        film.likeBy(userId);
+    }
+
+    private void unlikeInternal(Film film, Long userId) {
+        film.unlikeBy(userId);
+    }
 }
