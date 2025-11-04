@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.util.DurationMinutesSerializer;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -33,7 +34,7 @@ public class Film {
     @PositiveDuration
     private Duration duration;
 
-    private Set<Long> userLikes;
+    private Set<Long> userLikes = new HashSet<>();
 
     public void likeFrom(Long userId) {
         if (isLikedBy(userId)) {
