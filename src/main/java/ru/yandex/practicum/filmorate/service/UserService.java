@@ -30,12 +30,12 @@ public class UserService {
         return userStorage.update(user);
     }
 
-    public void deleteById(Long id) {
-        userStorage.delete(id);
+    public void delete(User user) {
+        deleteById(user.getId());
     }
 
-    public void delete(User user) {
-        userStorage.delete(user.getId());
+    public void deleteById(Long id) {
+        userStorage.delete(id);
     }
 
     public void becomeFriends(Long firstUserId, Long secondUserId) {
