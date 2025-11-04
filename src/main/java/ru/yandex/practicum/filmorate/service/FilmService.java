@@ -32,7 +32,11 @@ public class FilmService {
     }
 
     public void delete(Film film) {
-        filmStorage.delete(film.getId());
+        deleteById(film.getId());
+    }
+
+    public void deleteById(Long id) {
+        filmStorage.delete(id);
     }
 
     public List<Film> getTopTenFilmsByLikes() {
