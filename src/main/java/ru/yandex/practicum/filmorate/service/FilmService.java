@@ -69,6 +69,9 @@ public class FilmService {
     }
 
     private void unlikeInternal(Film film, Long userId) {
+        if (!userService.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
         if (!film.isLikedBy(userId)) {
             throw new UserHasNotLikedException("User with ID " + userId + " has not liked this film.");
         }
