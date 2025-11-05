@@ -131,14 +131,6 @@ class UserServiceTest {
     }
 
     @Test
-    void breakFriendship_shouldThrowIfNotFriends() {
-        when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
-        when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
-
-        assertThrows(FriendshipViolationException.class, () -> userService.breakFriendship(1L, 2L));
-    }
-
-    @Test
     void getMutualFriends_shouldReturnIntersection() {
         var user3 = new User();
         user3.setId(3L);

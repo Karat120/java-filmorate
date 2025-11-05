@@ -95,7 +95,7 @@ public class UserService {
 
     private void breakFriendshipInternal(User firstUser, User secondUser) {
         if (!isFriendsInternal(firstUser, secondUser)) {
-            throw new FriendshipViolationException("Users must be friends to break friendship");
+            return;
         }
 
         firstUser.removeFriend(secondUser.getId());
