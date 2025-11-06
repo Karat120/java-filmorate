@@ -2,16 +2,18 @@ package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.annotation.NotBeforeCinemaBirthday;
+import ru.yandex.practicum.filmorate.annotation.PositiveDuration;
 import ru.yandex.practicum.filmorate.util.DurationMinutesDeserializer;
 import ru.yandex.practicum.filmorate.util.DurationMinutesSerializer;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class Film {
@@ -29,12 +31,32 @@ public class Film {
 
     @JsonSerialize(using = DurationMinutesSerializer.class)
     @JsonDeserialize(using = DurationMinutesDeserializer.class)
+    @PositiveDuration
     private Duration duration;
 
-    public void setDuration(Duration duration) {
-        if (duration == null || duration.isNegative() || duration.isZero()) {
-            throw new ValidationException("Film duration must be positive");
+    private Set<Long> userLikes = new HashSet<>();
+
+    public void likeBy(Long userId) {
+        if (isLikedBy(userId)) {
+            throw new IllegalArgumentException(
+                    "User cannot like film more than one time");
         }
-        this.duration = duration;
+        userLikes.add(userId);
+    }
+
+    public void unlikeBy(Long userId) {
+        if (!isLikedBy(userId)) {
+            throw new IllegalArgumentException(
+                    "Cannot unlike a film that was not liked");
+        }
+        userLikes.remove(userId);
+    }
+
+    public boolean isLikedBy(Long userId) {
+        return userLikes.contains(userId);
+    }
+
+    public int countLikes() {
+        return userLikes.size();
     }
 }

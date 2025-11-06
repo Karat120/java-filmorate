@@ -3,46 +3,80 @@ package ru.yandex.practicum.filmorate.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.yandex.practicum.filmorate.dto.ErrorResponseDto;
 
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(ValidationException ex) {
+    private ErrorResponseDto buildErrorResponse(Exception ex, HttpStatus status, HttpServletRequest request) {
+        return ErrorResponseDto.builder()
+                .status(status.value())
+                .timestamp(LocalDateTime.now())
+                .path(request.getRequestURI())
+                .message(ex.getMessage() != null ? ex.getMessage() : status.getReasonPhrase())
+                .build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException ex,
+                                                                      HttpServletRequest request) {
         log.error("Validation error: {}", ex.getMessage());
-        Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException ex) {
+    public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException ex,
+                                                                        HttpServletRequest request) {
         log.warn("User not found: {}", ex.getMessage());
-        Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage() != null ? ex.getMessage() : "User not found");
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserAlreadyLikedException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAlreadyLikedException(UserAlreadyLikedException ex,
+                                                                            HttpServletRequest request) {
+        log.warn("User already liked the film: {}", ex.getMessage());
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.CONFLICT, request);
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserHasNotLikedException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserHasNotLikedException(UserHasNotLikedException ex,
+                                                                           HttpServletRequest request) {
+        log.warn("User has not liked the film: {}", ex.getMessage());
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.CONFLICT, request);
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(FilmNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleFilmNotFoundException(FilmNotFoundException ex) {
+    public ResponseEntity<ErrorResponseDto> handleFilmNotFoundException(FilmNotFoundException ex,
+                                                                        HttpServletRequest request) {
         log.warn("Film not found: {}", ex.getMessage());
-        Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage() != null ? ex.getMessage() : "Film not found");
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    // Для любых неожиданных ошибок
+    @ExceptionHandler(FriendshipViolationException.class)
+    public ResponseEntity<ErrorResponseDto> handleFriendshipViolationException(FriendshipViolationException ex,
+                                                                               HttpServletRequest request) {
+        log.warn("Friendship violation: {}", ex.getMessage());
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.CONFLICT, request);
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleOtherExceptions(Exception ex) {
+    public ResponseEntity<ErrorResponseDto> handleOtherExceptions(Exception ex,
+                                                                  HttpServletRequest request) {
         log.error("Unexpected error", ex);
-        Map<String, String> body = new HashMap<>();
-        body.put("error", "Unexpected error: " + ex.getMessage());
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
