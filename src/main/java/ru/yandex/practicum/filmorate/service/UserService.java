@@ -11,6 +11,8 @@ import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 @Service
 @AllArgsConstructor
@@ -46,17 +48,11 @@ public class UserService {
     }
 
     public void becomeFriends(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
-
-        becomeFriendsInternal(firstUser, secondUser);
+        performActionWithTwoUsers(firstUserId, secondUserId, this::becomeFriendsInternal);
     }
 
     public void breakFriendship(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
-
-        breakFriendshipInternal(firstUser, secondUser);
+        performActionWithTwoUsers(firstUserId, secondUserId, this::breakFriendshipInternal);
     }
 
     public List<User> getFriends(Long id) {
@@ -65,28 +61,35 @@ public class UserService {
     }
 
     public List<User> getMutualFriends(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
-
-        return getMutualFriendsInternal(firstUser, secondUser);
+        return performActionWithTwoUsers(firstUserId, secondUserId, this::getMutualFriendsInternal);
     }
 
     public boolean isFriends(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
-
-        return isFriendsInternal(firstUser, secondUser);
+        return performActionWithTwoUsers(firstUserId, secondUserId, this::isFriendsInternal);
     }
 
     public FriendshipStatus getFriendshipStateWith(Long firstUserId, Long secondUserId) {
-        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
-        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
-
-        return getFriendshipStateWithInternal(firstUser, secondUser);
+        return performActionWithTwoUsers(firstUserId, secondUserId, this::getFriendshipStateWithInternal);
     }
 
     public boolean existsById(Long id) {
         return userStorage.existsById(id);
+    }
+
+    private <T> T performActionWithTwoUsers(Long firstUserId, Long secondUserId, BiFunction<User, User, T> function)
+            throws UserNotFoundException {
+        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
+        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
+
+        return function.apply(firstUser, secondUser);
+    }
+
+    private void performActionWithTwoUsers(Long firstUserId, Long secondUserId, BiConsumer<User, User> action)
+            throws UserNotFoundException {
+        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
+        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
+
+        action.accept(firstUser, secondUser);
     }
 
     private void becomeFriendsInternal(User firstUser, User secondUser) {
