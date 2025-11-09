@@ -13,7 +13,11 @@ import java.util.Set;
 
 @Data
 public class User {
-    public enum FriendshipStatus {PENDING, CONFIRMED, NOT_FRIENDS}
+    public enum FriendshipStatus {
+        PENDING,
+        CONFIRMED,
+        NOT_FRIENDS
+    }
 
     private Long id;
 
