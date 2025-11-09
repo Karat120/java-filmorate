@@ -1,14 +1,14 @@
 -- Типы ENUM
-CREATE TYPE mpa_rating_enum AS ENUM ('G', 'PG', 'PG-13', 'R', 'NC-17');
+CREATE TYPE IF NOT EXISTS mpa_rating_enum AS ENUM ('G', 'PG', 'PG-13', 'R', 'NC-17');
 
 -- Таблица жанров
-CREATE TABLE genre (
+CREATE TABLE IF NOT EXISTS genre (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL
 );
 
 -- Таблица фильмов
-CREATE TABLE film (
+CREATE TABLE IF NOT EXISTS film (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(200),
@@ -18,7 +18,7 @@ CREATE TABLE film (
 );
 
 -- Таблица связи фильм-жанр (многие-ко-многим)
-CREATE TABLE film_genre (
+CREATE TABLE IF NOT EXISTS film_genre (
     film_id BIGINT NOT NULL,
     genre_id BIGINT NOT NULL,
     PRIMARY KEY (film_id, genre_id),
@@ -27,7 +27,7 @@ CREATE TABLE film_genre (
 );
 
 -- Таблица пользователей
-CREATE TABLE user_account (
+CREATE TABLE IF NOT EXISTS user_account (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     login VARCHAR(255) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE user_account (
 );
 
 -- Таблица лайков фильмов
-CREATE TABLE film_like (
+CREATE TABLE IF NOT EXISTS film_like (
     film_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     PRIMARY KEY (film_id, user_id),
@@ -45,7 +45,7 @@ CREATE TABLE film_like (
 );
 
 -- Таблица дружбы между пользователями
-CREATE TABLE friendship (
+CREATE TABLE IF NOT EXISTS friendship (
     user_id BIGINT NOT NULL,
     friend_id BIGINT NOT NULL,
     PRIMARY KEY (user_id, friend_id),
