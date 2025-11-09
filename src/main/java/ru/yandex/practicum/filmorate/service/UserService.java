@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FriendshipViolationException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.User.FriendshipStatus;
 import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.util.ArrayList;
@@ -77,6 +78,13 @@ public class UserService {
         return isFriendsInternal(firstUser, secondUser);
     }
 
+    public FriendshipStatus getFriendshipStateWith(Long firstUserId, Long secondUserId) {
+        var firstUser = userStorage.getById(firstUserId).orElseThrow(UserNotFoundException::new);
+        var secondUser = userStorage.getById(secondUserId).orElseThrow(UserNotFoundException::new);
+
+        return getFriendshipStateWithInternal(firstUser, secondUser);
+    }
+
     public boolean existsById(Long id) {
         return userStorage.existsById(id);
     }
@@ -111,5 +119,14 @@ public class UserService {
     private boolean isFriendsInternal(User firstUser, User secondUser) {
         return firstUser.hasFriend(secondUser.getId())
                 && secondUser.hasFriend(firstUser.getId());
+    }
+
+    private FriendshipStatus getFriendshipStateWithInternal(User firstUser, User secondUser) {
+        if (firstUser.hasFriend(secondUser.getId()) ^ secondUser.hasFriend(firstUser.getId())) {
+            return FriendshipStatus.PENDING;
+        } else if (firstUser.hasFriend(secondUser.getId()) && secondUser.hasFriend(firstUser.getId())) {
+            return FriendshipStatus.CONFIRMED;
+        }
+        return FriendshipStatus.NOT_FRIENDS;
     }
 }
