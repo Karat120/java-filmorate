@@ -34,7 +34,11 @@ public class Film {
     @PositiveDuration
     private Duration duration;
 
+    private MpaRating rating;
+
     private Set<Long> userLikes = new HashSet<>();
+
+    private Set<Long> genres = new HashSet<>();
 
     public void likeBy(Long userId) {
         if (isLikedBy(userId)) {
