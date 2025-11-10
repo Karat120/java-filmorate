@@ -31,7 +31,7 @@ public class FilmMapper implements RowMapper<Film> {
 
         String mpaRating = rs.getString("mpa_rating");
         if (mpaRating != null) {
-            film.setRating(MpaRating.valueOf(mpaRating));
+            film.setRating(MpaRating.fromDbValue(mpaRating));
         }
 
         film.setGenres(new HashSet<>());

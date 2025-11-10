@@ -84,7 +84,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration().toSeconds(),
-                film.getRating() != null ? film.getRating().name() : null
+                film.getRating() != null ? film.getRating().getDbValue() : null
         );
         film.setId(id);
         return film;
@@ -119,7 +119,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration().toSeconds(),
-                film.getRating() != null ? film.getRating().name() : null,
+                film.getRating() != null ? film.getRating().getDbValue() : null,
                 film.getId()
         );
         return film;
