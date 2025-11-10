@@ -149,7 +149,8 @@ class H2UserStorageTest {
         user2.setBirthday(LocalDate.of(1991, 2, 2));
         User saved2 = userStorage.add(user2);
 
-        // Add friendship relation
+        saved1.addFriend(saved2.getId());
+
         jdbc.update("INSERT INTO friendship(user_id, friend_id) VALUES (?, ?)", saved1.getId(), saved2.getId());
 
         Optional<User> found = userStorage.getById(saved1.getId());
