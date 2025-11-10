@@ -1,8 +1,10 @@
--- Типы ENUM
-CREATE TYPE IF NOT EXISTS mpa_rating_enum AS ENUM ('G', 'PG', 'PG-13', 'R', 'NC-17');
-
 -- Таблица жанров
 CREATE TABLE IF NOT EXISTS genre (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS mpa (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL
 );
@@ -14,7 +16,9 @@ CREATE TABLE IF NOT EXISTS film (
     description VARCHAR(200),
     release_date DATE,
     duration BIGINT,
-    mpa_rating mpa_rating_enum
+    mpa_id BIGINT,
+
+    FOREIGN KEY(mpa_id) REFERENCES mpa(id)
 );
 
 -- Таблица связи фильм-жанр (многие-ко-многим)

@@ -40,6 +40,12 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             WHERE film_id = ?
             """;
 
+    private static final String FIND_MPA_QUERY = """
+            SELECT mpa_id
+            FROM film
+            WHERE id = ?
+            """;
+
     private static final String GET_TOP_N_FILMS_BY_LIKES_QUERY = """
             SELECT f.*, COUNT(fl.user_id) as likes_count
             FROM film f
@@ -50,8 +56,8 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             """;
 
     private static final String INSERT_QUERY = """
-            INSERT INTO film(name, description, release_date, duration, mpa_rating)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO film(name, description, release_date, duration)
+            VALUES (?, ?, ?, ?)
             """;
 
     private static final String UPDATE_QUERY = """
@@ -59,8 +65,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             SET name = ?,
                 description = ?,
                 release_date = ?,
-                duration = ?,
-                mpa_rating = ?
+                duration = ?
             WHERE id = ?
             """;
 
@@ -68,6 +73,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             DELETE FROM film
             WHERE id = ?
             """;
+
 
 
     public H2FilmStorage(JdbcTemplate jdbc, FilmMapper mapper) {
@@ -81,8 +87,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
-                film.getDuration().toSeconds(),
-                film.getRating() != null ? film.getRating().getDbValue() : null
+                film.getDuration().toSeconds()
         );
         film.setId(id);
         return film;
@@ -117,7 +122,6 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration().toSeconds(),
-                film.getRating() != null ? film.getRating().getDbValue() : null,
                 film.getId()
         );
         return film;
@@ -131,6 +135,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
     private void loadFilmData(Film film) {
         loadGenres(film);
         loadLikes(film);
+        loadMpaRating(film);
     }
 
     private void loadGenres(Film film) {
@@ -141,5 +146,10 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
     private void loadLikes(Film film) {
         Set<Long> likeIds = new HashSet<>(jdbc.queryForList(FIND_LIKES_QUERY, Long.class, film.getId()));
         FilmMapper.loadLikes(film, likeIds);
+    }
+
+    private void loadMpaRating(Film film) {
+        Long mpaId = jdbc.queryForObject(FIND_MPA_QUERY, Long.class, film.getId());
+        FilmMapper.loadMpa(film, mpaId);
     }
 }

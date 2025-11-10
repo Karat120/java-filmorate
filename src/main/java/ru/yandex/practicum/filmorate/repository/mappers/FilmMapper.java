@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.repository.mappers;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.MpaRating;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,11 +28,6 @@ public class FilmMapper implements RowMapper<Film> {
         var duration = Duration.ofSeconds(rs.getLong("duration"));
         film.setDuration(duration);
 
-        String mpaRating = rs.getString("mpa_rating");
-        if (mpaRating != null) {
-            film.setRating(MpaRating.fromDbValue(mpaRating));
-        }
-
         film.setGenres(new HashSet<>());
         film.setUserLikes(new HashSet<>());
         return film;
@@ -42,6 +36,8 @@ public class FilmMapper implements RowMapper<Film> {
     public static void loadGenres(Film film, Set<Long> genreIds) {
         film.setGenres(genreIds);
     }
+
+    public static void loadMpa(Film film, Long mpaId) {film.setMpaRating(mpaId);}
 
     public static void loadLikes(Film film, Set<Long> likeIds) {
         film.setUserLikes(likeIds);

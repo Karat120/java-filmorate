@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.MpaRating;
 import ru.yandex.practicum.filmorate.repository.impl.H2FilmStorage;
 import ru.yandex.practicum.filmorate.repository.mappers.FilmMapper;
 
@@ -49,14 +48,12 @@ class H2FilmStorageTest {
         film.setDescription("Dream within a dream");
         film.setReleaseDate(LocalDate.of(2010, 7, 16));
         film.setDuration(Duration.ofMinutes(148));
-        film.setRating(MpaRating.PG_13);
 
         Film saved = filmStorage.add(film);
         Optional<Film> found = filmStorage.getById(saved.getId());
 
         assertThat(found).isPresent();
         assertThat(found.get().getName()).isEqualTo("Inception");
-        assertThat(found.get().getRating()).isEqualTo(MpaRating.PG_13);
     }
 
     @Test
@@ -67,7 +64,6 @@ class H2FilmStorageTest {
         film.setDescription("Initial");
         film.setReleaseDate(LocalDate.of(2000, 1, 1));
         film.setDuration(Duration.ofMinutes(100));
-        film.setRating(MpaRating.G);
 
         Film saved = filmStorage.add(film);
         saved.setName("Updated");
@@ -130,7 +126,6 @@ class H2FilmStorageTest {
         film1.setDescription("Desc");
         film1.setReleaseDate(LocalDate.of(2001, 1, 1));
         film1.setDuration(Duration.ofMinutes(90));
-        film1.setRating(MpaRating.G);
         Film top1 = filmStorage.add(film1);
 
         Film film2 = new Film();
@@ -138,7 +133,6 @@ class H2FilmStorageTest {
         film2.setDescription("Desc");
         film2.setReleaseDate(LocalDate.of(2002, 2, 2));
         film2.setDuration(Duration.ofMinutes(100));
-        film2.setRating(MpaRating.G);
         Film top2 = filmStorage.add(film2);
 
         // Добавляем пользователей и лайки

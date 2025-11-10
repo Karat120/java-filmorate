@@ -34,7 +34,7 @@ public class Film {
     @PositiveDuration
     private Duration duration;
 
-    private MpaRating rating;
+    private Long mpaRating;
 
     private Set<Long> userLikes = new HashSet<>();
 
