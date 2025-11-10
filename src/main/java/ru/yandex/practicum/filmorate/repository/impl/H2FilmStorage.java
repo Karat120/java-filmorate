@@ -69,11 +69,9 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             WHERE id = ?
             """;
 
-    private final JdbcTemplate jdbc;
 
     public H2FilmStorage(JdbcTemplate jdbc, FilmMapper mapper) {
         super(jdbc, mapper);
-        this.jdbc = jdbc;
     }
 
     @Override
