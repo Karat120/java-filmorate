@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.repository.impl;
+package ru.yandex.practicum.filmorate.user.infrastructure.repository.h2.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.repository.mappers.UserMapper;
+import ru.yandex.practicum.filmorate.user.domain.model.User;
+import ru.yandex.practicum.filmorate.user.infrastructure.repository.h2.mapper.UserMapper;
 
 import java.time.LocalDate;
 import java.util.List;

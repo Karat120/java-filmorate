@@ -6,10 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.exception.FriendshipViolationException;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.repository.UserStorage;
+import ru.yandex.practicum.filmorate.user.domain.exception.FriendshipViolationException;
+import ru.yandex.practicum.filmorate.user.domain.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.user.domain.model.User;
+import ru.yandex.practicum.filmorate.user.application.service.UserService;
+import ru.yandex.practicum.filmorate.user.domain.repository.UserStorage;
 
 import java.util.List;
 import java.util.Optional;

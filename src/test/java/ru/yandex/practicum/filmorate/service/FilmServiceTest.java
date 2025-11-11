@@ -6,9 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.repository.FilmStorage;
+import ru.yandex.practicum.filmorate.film.domain.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.film.application.service.FilmService;
+import ru.yandex.practicum.filmorate.film.domain.model.Film;
+import ru.yandex.practicum.filmorate.film.domain.repository.FilmStorage;
 
 import java.util.List;
 import java.util.Optional;
