@@ -65,11 +65,8 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
             WHERE id = ?
             """;
 
-    private final JdbcTemplate jdbc;
-
     public H2UserStorage(JdbcTemplate jdbc, UserMapper mapper) {
         super(jdbc, mapper);
-        this.jdbc = jdbc;
     }
 
     @Override
