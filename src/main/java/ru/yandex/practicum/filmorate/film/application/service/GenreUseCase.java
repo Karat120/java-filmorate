@@ -5,13 +5,15 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.film.domain.exception.GenreNotFoundException;
 import ru.yandex.practicum.filmorate.film.domain.model.Genre;
 import ru.yandex.practicum.filmorate.film.domain.repository.GenreStorage;
+import ru.yandex.practicum.filmorate.film.domain.service.GenreService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GenreService {
+public class GenreUseCase {
     private final GenreStorage genreStorage;
+    private final GenreService genreService;
 
     public Genre add(Genre genre) {
         return genreStorage.add(genre);
@@ -29,17 +31,14 @@ public class GenreService {
         return genreStorage.getById(id).isPresent();
     }
 
-    public Genre update(Genre genre) {
-        if (genreStorage.getById(genre.getId()).isEmpty()) {
-            throw new GenreNotFoundException();
-        }
-        return genreStorage.update(genre);
+    public Genre update(Long id) {
+        Genre genre = genreStorage.getById(id).orElseThrow(GenreNotFoundException::new);
+        genreService.update(genre);
+        return genre;
     }
 
     public void delete(Long id) {
-        if (genreStorage.getById(id).isEmpty()) {
-            throw new GenreNotFoundException();
-        }
-        genreStorage.delete(id);
+        Genre genre = genreStorage.getById(id).orElseThrow(GenreNotFoundException::new);
+        genreService.delete(genre);
     }
 }
