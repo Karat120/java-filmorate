@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MpaStorage {
-    MpaRating add(MpaRating mpaRating);
+    void add(MpaRating mpaRating);
 
     Optional<MpaRating> getById(Long id);
 
     List<MpaRating> getAll();
 
-    MpaRating update(MpaRating mpa);
+    void update(MpaRating mpa);
 
     void delete(Long id);
 }
