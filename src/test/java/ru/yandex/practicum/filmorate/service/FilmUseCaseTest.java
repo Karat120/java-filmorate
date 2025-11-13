@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.yandex.practicum.filmorate.film.domain.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.film.application.service.FilmService;
+import ru.yandex.practicum.filmorate.film.application.service.FilmUseCase;
 import ru.yandex.practicum.filmorate.film.domain.model.Film;
 import ru.yandex.practicum.filmorate.film.domain.repository.FilmStorage;
 
@@ -20,13 +20,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FilmServiceTest {
+class FilmUseCaseTest {
 
     @Mock
     private FilmStorage filmStorage;
 
     @InjectMocks
-    private FilmService filmService;
+    private FilmUseCase filmUseCase;
 
     private Film film;
 
@@ -41,7 +41,7 @@ class FilmServiceTest {
     void create_shouldDelegateToStorage() {
         when(filmStorage.add(film)).thenReturn(film);
 
-        var created = filmService.create(film);
+        var created = filmUseCase.create(film);
 
         assertEquals(1L, film.getId());
         assertEquals(film, created);
@@ -53,7 +53,7 @@ class FilmServiceTest {
     void getById_shouldReturnFilmIfExists() {
         when(filmStorage.getById(1L)).thenReturn(Optional.of(film));
 
-        var result = filmService.getById(1L);
+        var result = filmUseCase.getById(1L);
 
         assertEquals(film, result);
         verify(filmStorage).getById(1L);
@@ -62,14 +62,14 @@ class FilmServiceTest {
     @Test
     void getById_shouldThrowIfNotFound() {
         when(filmStorage.getById(99L)).thenReturn(Optional.empty());
-        assertThrows(FilmNotFoundException.class, () -> filmService.getById(99L));
+        assertThrows(FilmNotFoundException.class, () -> filmUseCase.getById(99L));
     }
 
     @Test
     void getAll_shouldDelegateToStorage() {
         when(filmStorage.getAll()).thenReturn(List.of(film));
 
-        var films = filmService.getAll();
+        var films = filmUseCase.getAll();
 
         assertEquals(1, films.size());
         assertEquals(film, films.get(0));
@@ -80,7 +80,7 @@ class FilmServiceTest {
     void update_shouldDelegateToStorage() {
         when(filmStorage.update(film)).thenReturn(film);
 
-        var updated = filmService.update(film);
+        var updated = filmUseCase.update(film);
 
         assertEquals(film, updated);
         verify(filmStorage).update(film);
@@ -90,7 +90,7 @@ class FilmServiceTest {
     void delete_shouldDelegateToStorage() {
         film.setId(5L);
 
-        filmService.delete(film);
+        filmUseCase.delete(film);
 
         verify(filmStorage).delete(5L);
     }
@@ -100,7 +100,7 @@ class FilmServiceTest {
         var topFilms = List.of(film);
         when(filmStorage.getTopNFilmsByLikes(10)).thenReturn(topFilms);
 
-        var result = filmService.getTopNFilmsByLikes(10);
+        var result = filmUseCase.getTopNFilmsByLikes(10);
 
         assertEquals(topFilms, result);
         verify(filmStorage).getTopNFilmsByLikes(10);

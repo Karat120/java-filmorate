@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.film.domain.model.Film;
-import ru.yandex.practicum.filmorate.film.application.service.FilmService;
+import ru.yandex.practicum.filmorate.film.application.service.FilmUseCase;
 
 import java.util.List;
 
@@ -23,11 +23,11 @@ import java.util.List;
 @AllArgsConstructor
 public class FilmController {
 
-    private final FilmService filmService;
+    private final FilmUseCase filmUseCase;
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
-        filmService.create(film);
+        filmUseCase.create(film);
 
         log.info("Film created: id={}, name={}", film.getId(), film.getName());
         return film;
@@ -35,7 +35,7 @@ public class FilmController {
 
     @GetMapping
     public List<Film> getAllFilms() {
-        var films = filmService.getAll();
+        var films = filmUseCase.getAll();
 
         log.debug("Retrieving all films (total={})", films.size());
         return films;
@@ -43,12 +43,12 @@ public class FilmController {
 
     @GetMapping("/popular")
     public List<Film> getTopNFilmsByLikes(@RequestParam int count) {
-        return filmService.getTopNFilmsByLikes(count);
+        return filmUseCase.getTopNFilmsByLikes(count);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
-        filmService.update(film);
+        filmUseCase.update(film);
 
         log.info("Film updated: id={}, name={}", film.getId(), film.getName());
         return film;
@@ -56,18 +56,18 @@ public class FilmController {
 
     @DeleteMapping("/{id}")
     public void deleteFilm(@PathVariable Long id) {
-        filmService.deleteById(id);
+        filmUseCase.deleteById(id);
 
         log.info("Film deleted: id={}", id);
     }
 
     @PutMapping("/{filmId}/like/{userId}")
     public void like(@PathVariable Long filmId, @PathVariable Long userId) {
-        filmService.like(filmId, userId);
+        filmUseCase.like(filmId, userId);
     }
 
     @DeleteMapping("/{filmId}/like/{userId}")
     public void unlike(@PathVariable Long filmId, @PathVariable Long userId) {
-        filmService.unlike(filmId, userId);
+        filmUseCase.unlike(filmId, userId);
     }
 }
