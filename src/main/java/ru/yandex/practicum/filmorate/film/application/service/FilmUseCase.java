@@ -15,8 +15,8 @@ public class FilmUseCase {
     private final FilmStorage filmStorage;
     private FilmService filmService;
 
-    public Film create(Film film) {
-        return filmStorage.add(film);
+    public void create(Film film) {
+        filmStorage.add(film);
     }
 
     public Film getById(Long id) {
@@ -28,7 +28,8 @@ public class FilmUseCase {
     }
 
     public Film update(Film film) {
-        return filmStorage.update(film);
+        filmStorage.update(film);
+        return film;
     }
 
     public void delete(Film film) {

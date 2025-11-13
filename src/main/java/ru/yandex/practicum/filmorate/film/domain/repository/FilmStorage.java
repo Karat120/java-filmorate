@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FilmStorage {
-    Film add(Film film);
+    void add(Film film);
 
     Optional<Film> getById(Long id);
 
@@ -14,7 +14,7 @@ public interface FilmStorage {
 
     List<Film> getTopNFilmsByLikes(int n);
 
-    Film update(Film film);
+    void update(Film film);
 
     void delete(Long id);
 }

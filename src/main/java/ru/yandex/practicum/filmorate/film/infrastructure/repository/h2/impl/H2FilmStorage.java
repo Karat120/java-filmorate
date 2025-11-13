@@ -81,7 +81,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
     }
 
     @Override
-    public Film add(Film film) {
+    public void add(Film film) {
         long id = insert(
                 INSERT_QUERY,
                 film.getName(),
@@ -90,7 +90,6 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getDuration().toSeconds()
         );
         film.setId(id);
-        return film;
     }
 
     @Override
@@ -115,7 +114,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
     }
 
     @Override
-    public Film update(Film film) {
+    public void update(Film film) {
         update(
                 UPDATE_QUERY,
                 film.getName(),
@@ -124,7 +123,6 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getDuration().toSeconds(),
                 film.getId()
         );
-        return film;
     }
 
     @Override

@@ -49,8 +49,8 @@ class H2FilmStorageTest {
         film.setReleaseDate(LocalDate.of(2010, 7, 16));
         film.setDuration(Duration.ofMinutes(148));
 
-        Film saved = filmStorage.add(film);
-        Optional<Film> found = filmStorage.getById(saved.getId());
+        filmStorage.add(film);
+        Optional<Film> found = filmStorage.getById(film.getId());
 
         assertThat(found).isPresent();
         assertThat(found.get().getName()).isEqualTo("Inception");
@@ -65,14 +65,14 @@ class H2FilmStorageTest {
         film.setReleaseDate(LocalDate.of(2000, 1, 1));
         film.setDuration(Duration.ofMinutes(100));
 
-        Film saved = filmStorage.add(film);
-        saved.setName("Updated");
-        saved.setDescription("Updated description");
-        saved.setDuration(Duration.ofMinutes(120));
+        filmStorage.add(film);
+        film.setName("Updated");
+        film.setDescription("Updated description");
+        film.setDuration(Duration.ofMinutes(120));
 
-        filmStorage.update(saved);
+        filmStorage.update(film);
 
-        Optional<Film> found = filmStorage.getById(saved.getId());
+        Optional<Film> found = filmStorage.getById(film.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getName()).isEqualTo("Updated");
         assertThat(found.get().getDescription()).isEqualTo("Updated description");
@@ -87,10 +87,10 @@ class H2FilmStorageTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 1));
         film.setDuration(Duration.ofMinutes(90));
 
-        Film saved = filmStorage.add(film);
-        filmStorage.delete(saved.getId());
+        filmStorage.add(film);
+        filmStorage.delete(film.getId());
 
-        Optional<Film> found = filmStorage.getById(saved.getId());
+        Optional<Film> found = filmStorage.getById(film.getId());
         assertThat(found).isEmpty();
     }
 
@@ -126,14 +126,14 @@ class H2FilmStorageTest {
         film1.setDescription("Desc");
         film1.setReleaseDate(LocalDate.of(2001, 1, 1));
         film1.setDuration(Duration.ofMinutes(90));
-        Film top1 = filmStorage.add(film1);
+        filmStorage.add(film1);
 
         Film film2 = new Film();
         film2.setName("Top2");
         film2.setDescription("Desc");
         film2.setReleaseDate(LocalDate.of(2002, 2, 2));
         film2.setDuration(Duration.ofMinutes(100));
-        Film top2 = filmStorage.add(film2);
+        filmStorage.add(film2);
 
         // Добавляем пользователей и лайки
         jdbc.update("INSERT INTO user_account(email, login, name, birthday) VALUES('a@a.com', 'a', 'A', '2000-01-01')");
@@ -146,13 +146,13 @@ class H2FilmStorageTest {
         Long user3 = jdbc.queryForObject("SELECT id FROM user_account WHERE email='c@c.com'", Long.class);
 
         // Теперь добавляем лайки
-        jdbc.update("INSERT INTO film_like(film_id, user_id) VALUES (?, ?)", top1.getId(), user1);
-        jdbc.update("INSERT INTO film_like(film_id, user_id) VALUES (?, ?)", top1.getId(), user2);
-        jdbc.update("INSERT INTO film_like(film_id, user_id) VALUES (?, ?)", top2.getId(), user3);
+        jdbc.update("INSERT INTO film_like(film_id, user_id) VALUES (?, ?)", film1.getId(), user1);
+        jdbc.update("INSERT INTO film_like(film_id, user_id) VALUES (?, ?)", film1.getId(), user2);
+        jdbc.update("INSERT INTO film_like(film_id, user_id) VALUES (?, ?)", film2.getId(), user3);
 
         List<Film> top = filmStorage.getTopNFilmsByLikes(2);
 
         assertThat(top).hasSize(2);
-        assertThat(top.get(0).getId()).isEqualTo(top1.getId()); // 2 лайка
+        assertThat(top.get(0).getId()).isEqualTo(film1.getId()); // 2 лайка
     }
 }

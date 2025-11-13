@@ -21,10 +21,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final IdGenerator<Long> idGenerator;
 
     @Override
-    public Film add(Film film) {
+    public void add(Film film) {
         film.setId(idGenerator.generate());
         films.put(film.getId(), film);
-        return film;
     }
 
     @Override
@@ -46,12 +45,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film update(Film film) {
+    public void update(Film film) {
         if (film.getId() == null || !films.containsKey(film.getId())) {
             throw new UserNotFoundException();
         }
         films.put(film.getId(), film);
-        return film;
     }
 
     @Override
