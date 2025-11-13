@@ -48,11 +48,15 @@ public class FilmUseCase {
         var film = filmStorage.getById(filmId).orElseThrow(FilmNotFoundException::new);
 
         filmService.like(film, likedById);
+
+        filmStorage.update(film);
     }
 
     public void unlike(Long filmId, Long userId) {
         var film = filmStorage.getById(filmId).orElseThrow(FilmNotFoundException::new);
 
         filmService.unlike(film, userId);
+
+        filmStorage.update(film);
     }
 }
