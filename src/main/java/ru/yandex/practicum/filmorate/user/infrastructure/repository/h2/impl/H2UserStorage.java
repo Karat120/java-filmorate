@@ -70,7 +70,7 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
     }
 
     @Override
-    public User add(User user) {
+    public void add(User user) {
         long id = insert(
                 INSERT_QUERY,
                 user.getEmail(),
@@ -79,7 +79,6 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
                 user.getBirthday()
         );
         user.setId(id);
-        return user;
     }
 
     @Override
@@ -113,7 +112,7 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
     }
 
     @Override
-    public User update(User user) {
+    public void update(User user) {
         update(
                 UPDATE_QUERY,
                 user.getEmail(),
@@ -122,7 +121,6 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
                 user.getBirthday(),
                 user.getId()
         );
-        return user;
     }
 
     @Override

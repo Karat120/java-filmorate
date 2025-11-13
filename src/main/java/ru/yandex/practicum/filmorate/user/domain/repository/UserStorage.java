@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserStorage {
-    User add(User user);
+    void add(User user);
 
     Optional<User> getById(Long id);
 
@@ -14,7 +14,7 @@ public interface UserStorage {
 
     List<User> getAllByIds(List<Long> ids);
 
-    User update(User user);
+    void update(User user);
 
     void delete(Long id);
 

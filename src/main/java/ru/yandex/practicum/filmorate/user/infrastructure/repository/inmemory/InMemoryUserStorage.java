@@ -21,10 +21,9 @@ public class InMemoryUserStorage implements UserStorage {
     private final IdGenerator<Long> idGenerator;
 
     @Override
-    public User add(User user) {
+    public void add(User user) {
         user.setId(idGenerator.generate());
         users.put(user.getId(), user);
-        return user;
     }
 
     @Override
@@ -46,12 +45,11 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User update(User user) {
+    public void update(User user) {
         if (user.getId() == null || !users.containsKey(user.getId())) {
             throw new UserNotFoundException();
         }
         users.put(user.getId(), user);
-        return user;
     }
 
     @Override

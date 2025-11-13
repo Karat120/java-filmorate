@@ -19,8 +19,8 @@ import java.util.function.BiFunction;
 public class UserService {
     private final UserStorage userStorage;
 
-    public User create(User user) {
-        return userStorage.add(user);
+    public void create(User user) {
+        userStorage.add(user);
     }
 
     public User getById(Long id) {
@@ -36,7 +36,8 @@ public class UserService {
     }
 
     public User update(User user) {
-        return userStorage.update(user);
+        userStorage.update(user);
+        return user;
     }
 
     public void delete(User user) {

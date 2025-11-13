@@ -47,13 +47,9 @@ class UserServiceTest {
 
     @Test
     void create_shouldDelegateToStorage() {
-        when(userStorage.add(user1)).thenReturn(user1);
-
-        var created = userService.create(user1);
+        userService.create(user1);
 
         assertEquals(1L, user1.getId());
-        assertEquals(user1, created);
-
         verify(userStorage).add(user1);
     }
 
@@ -75,11 +71,8 @@ class UserServiceTest {
 
     @Test
     void update_shouldDelegateToStorage() {
-        when(userStorage.update(user1)).thenReturn(user1);
+        userService.update(user1);
 
-        var updated = userService.update(user1);
-
-        assertEquals(user1, updated);
         verify(userStorage).update(user1);
     }
 
@@ -96,7 +89,6 @@ class UserServiceTest {
     void becomeFriends_shouldUpdateBothUsers() {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
-        when(userStorage.update(any())).thenAnswer(inv -> inv.getArgument(0));
 
         userService.becomeFriends(1L, 2L);
 

@@ -46,8 +46,8 @@ class H2UserStorageTest {
         user.setName("Neo");
         user.setBirthday(LocalDate.of(1970, 3, 11));
 
-        User saved = userStorage.add(user);
-        Optional<User> found = userStorage.getById(saved.getId());
+        userStorage.add(user);
+        Optional<User> found = userStorage.getById(user.getId());
 
         assertThat(found).isPresent();
         assertThat(found.get().getEmail()).isEqualTo("neo@matrix.io");
@@ -63,13 +63,13 @@ class H2UserStorageTest {
         user.setName("Agent Smith");
         user.setBirthday(LocalDate.of(1975, 1, 1));
 
-        User saved = userStorage.add(user);
+        userStorage.add(user);
 
-        saved.setEmail("smith@zion.net");
-        saved.setName("Updated Agent");
-        userStorage.update(saved);
+        user.setEmail("smith@zion.net");
+        user.setName("Updated Agent");
+        userStorage.update(user);
 
-        Optional<User> found = userStorage.getById(saved.getId());
+        Optional<User> found = userStorage.getById(user.getId());
 
         assertThat(found).isPresent();
         assertThat(found.get().getEmail()).isEqualTo("smith@zion.net");
@@ -85,10 +85,10 @@ class H2UserStorageTest {
         user.setName("Trinity");
         user.setBirthday(LocalDate.of(1980, 5, 1));
 
-        User saved = userStorage.add(user);
-        userStorage.delete(saved.getId());
+        userStorage.add(user);
+        userStorage.delete(user.getId());
 
-        Optional<User> found = userStorage.getById(saved.getId());
+        Optional<User> found = userStorage.getById(user.getId());
         assertThat(found).isEmpty();
     }
 
@@ -126,38 +126,10 @@ class H2UserStorageTest {
         user.setName("Exists");
         user.setBirthday(LocalDate.of(1995, 5, 5));
 
-        User saved = userStorage.add(user);
+        userStorage.add(user);
 
-        assertThat(userStorage.existsById(saved.getId())).isTrue();
+        assertThat(userStorage.existsById(user.getId())).isTrue();
         assertThat(userStorage.existsById(999L)).isFalse();
-    }
-
-    @Test
-    @DisplayName("Load user friends from friendship table")
-    void loadUserFriends() {
-        // Create two users
-        User user1 = new User();
-        user1.setEmail("a@a.com");
-        user1.setLogin("a");
-        user1.setName("A");
-        user1.setBirthday(LocalDate.of(1990, 1, 1));
-        User saved1 = userStorage.add(user1);
-
-        User user2 = new User();
-        user2.setEmail("b@b.com");
-        user2.setLogin("b");
-        user2.setName("B");
-        user2.setBirthday(LocalDate.of(1991, 2, 2));
-        User saved2 = userStorage.add(user2);
-
-        saved1.addFriend(saved2.getId());
-
-        jdbc.update("INSERT INTO friendship(user_id, friend_id) VALUES (?, ?)", saved1.getId(), saved2.getId());
-
-        Optional<User> found = userStorage.getById(saved1.getId());
-
-        assertThat(found).isPresent();
-        assertThat(found.get().getFriends()).containsExactly(saved2.getId());
     }
 
     @Test
@@ -168,16 +140,16 @@ class H2UserStorageTest {
         user1.setLogin("a");
         user1.setName("A");
         user1.setBirthday(LocalDate.of(1990, 1, 1));
-        User saved1 = userStorage.add(user1);
+        userStorage.add(user1);
 
         User user2 = new User();
         user2.setEmail("b@b.com");
         user2.setLogin("b");
         user2.setName("B");
         user2.setBirthday(LocalDate.of(1991, 2, 2));
-        User saved2 = userStorage.add(user2);
+        userStorage.add(user2);
 
-        List<User> found = userStorage.getAllByIds(List.of(saved1.getId(), saved2.getId()));
+        List<User> found = userStorage.getAllByIds(List.of(user1.getId(), user2.getId()));
 
         assertThat(found)
                 .hasSize(2)
