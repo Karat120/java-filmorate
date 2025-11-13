@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre;
 
-public record GenreUpdateRequest(
+public record UpdateGenreRequest(
         Long id,
         String name
 ) {
