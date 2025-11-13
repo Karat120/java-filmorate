@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.user.domain.model.User;
-import ru.yandex.practicum.filmorate.user.application.service.UserService;
+import ru.yandex.practicum.filmorate.user.application.service.UserUseCase;
 
 import java.util.List;
 
@@ -16,25 +16,25 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 public class FriendsController {
-    private final UserService userService;
+    private final UserUseCase userUseCase;
 
     @GetMapping
     public List<User> getAll(@PathVariable Long thisId) {
-        return userService.getFriends(thisId);
+        return userUseCase.getFriends(thisId);
     }
 
     @GetMapping("/common/{otherId}")
     public List<User> getCommonFriends(@PathVariable Long thisId, @PathVariable Long otherId) {
-        return userService.getMutualFriends(thisId, otherId);
+        return userUseCase.getMutualFriends(thisId, otherId);
     }
 
     @PutMapping("/{otherId}")
     public void add(@PathVariable Long thisId, @PathVariable Long otherId) {
-        userService.becomeFriends(thisId, otherId);
+        userUseCase.becomeFriends(thisId, otherId);
     }
 
     @DeleteMapping("/{otherId}")
     public void remove(@PathVariable Long thisId, @PathVariable Long otherId) {
-        userService.breakFriendship(thisId, otherId);
+        userUseCase.breakFriendship(thisId, otherId);
     }
 }

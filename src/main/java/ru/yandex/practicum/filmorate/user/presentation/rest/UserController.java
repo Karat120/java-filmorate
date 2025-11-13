@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.user.domain.model.User;
-import ru.yandex.practicum.filmorate.user.application.service.UserService;
+import ru.yandex.practicum.filmorate.user.application.service.UserUseCase;
 
 import java.util.List;
 
@@ -21,11 +21,11 @@ import java.util.List;
 @RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final UserUseCase userUseCase;
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        userService.create(user);
+        userUseCase.create(user);
 
         log.info("User created: id={}, email={}, login={}", user.getId(), user.getEmail(), user.getLogin());
         return user;
@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping
     public List<User> getAll() {
-        var users = userService.getAll();
+        var users = userUseCase.getAll();
 
         log.debug("Retrieving all users (total={})", users.size());
         return users;
@@ -41,7 +41,7 @@ public class UserController {
 
     @PutMapping
     public User update(@Valid @RequestBody User user) {
-        userService.update(user);
+        userUseCase.update(user);
 
         log.info("User updated: id={}, email={}, login={}", user.getId(), user.getEmail(), user.getLogin());
         return user;
@@ -49,7 +49,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        userService.deleteById(id);
+        userUseCase.deleteById(id);
 
         log.info("User deleted: id={}", id);
     }

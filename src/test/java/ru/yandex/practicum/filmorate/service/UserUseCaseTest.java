@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.yandex.practicum.filmorate.user.domain.exception.FriendshipViolationException;
 import ru.yandex.practicum.filmorate.user.domain.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.user.domain.model.User;
-import ru.yandex.practicum.filmorate.user.application.service.UserService;
+import ru.yandex.practicum.filmorate.user.application.service.UserUseCase;
 import ru.yandex.practicum.filmorate.user.domain.repository.UserStorage;
 
 import java.util.List;
@@ -25,13 +25,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserUseCaseTest {
 
     @Mock
     private UserStorage userStorage;
 
     @InjectMocks
-    private UserService userService;
+    private UserUseCase userUseCase;
 
     private User user1;
     private User user2;
@@ -47,7 +47,7 @@ class UserServiceTest {
 
     @Test
     void create_shouldDelegateToStorage() {
-        userService.create(user1);
+        userUseCase.create(user1);
 
         assertEquals(1L, user1.getId());
         verify(userStorage).add(user1);
@@ -57,7 +57,7 @@ class UserServiceTest {
     void getById_shouldReturnUserIfExists() {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
 
-        var result = userService.getById(1L);
+        var result = userUseCase.getById(1L);
 
         assertEquals(user1, result);
         verify(userStorage).getById(1L);
@@ -66,12 +66,12 @@ class UserServiceTest {
     @Test
     void getById_shouldThrowIfNotFound() {
         when(userStorage.getById(99L)).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> userService.getById(99L));
+        assertThrows(UserNotFoundException.class, () -> userUseCase.getById(99L));
     }
 
     @Test
     void update_shouldDelegateToStorage() {
-        userService.update(user1);
+        userUseCase.update(user1);
 
         verify(userStorage).update(user1);
     }
@@ -80,7 +80,7 @@ class UserServiceTest {
     void delete_shouldDelegateToStorage() {
         user1.setId(1L);
 
-        userService.delete(user1);
+        userUseCase.delete(user1);
 
         verify(userStorage).delete(1L);
     }
@@ -90,7 +90,7 @@ class UserServiceTest {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
-        userService.becomeFriends(1L, 2L);
+        userUseCase.becomeFriends(1L, 2L);
 
         assertTrue(user1.getFriends().contains(2L));
         assertTrue(user2.getFriends().contains(1L));
@@ -106,7 +106,7 @@ class UserServiceTest {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
-        assertThrows(FriendshipViolationException.class, () -> userService.becomeFriends(1L, 2L));
+        assertThrows(FriendshipViolationException.class, () -> userUseCase.becomeFriends(1L, 2L));
     }
 
     @Test
@@ -117,7 +117,7 @@ class UserServiceTest {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
-        userService.breakFriendship(1L, 2L);
+        userUseCase.breakFriendship(1L, 2L);
 
         assertFalse(user1.getFriends().contains(2L));
         assertFalse(user2.getFriends().contains(1L));
@@ -135,7 +135,7 @@ class UserServiceTest {
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
         when(userStorage.getById(3L)).thenReturn(Optional.of(user3));
 
-        var mutual = userService.getMutualFriends(1L, 2L);
+        var mutual = userUseCase.getMutualFriends(1L, 2L);
 
         assertEquals(List.of(user3), mutual);
     }
@@ -148,7 +148,7 @@ class UserServiceTest {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
-        assertTrue(userService.isFriends(1L, 2L));
+        assertTrue(userUseCase.isFriends(1L, 2L));
     }
 
     @Test
@@ -158,6 +158,6 @@ class UserServiceTest {
         when(userStorage.getById(1L)).thenReturn(Optional.of(user1));
         when(userStorage.getById(2L)).thenReturn(Optional.of(user2));
 
-        assertFalse(userService.isFriends(1L, 2L));
+        assertFalse(userUseCase.isFriends(1L, 2L));
     }
 }
