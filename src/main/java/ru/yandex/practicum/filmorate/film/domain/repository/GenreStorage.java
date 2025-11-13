@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GenreStorage {
-    Genre add(Genre genre);
+    void add(Genre genre);
 
     Optional<Genre> getById(Long id);
 
     List<Genre> getAll();
 
-    Genre update(Genre genre);
+    void update(Genre genre);
 
     void delete(Long id);
 }

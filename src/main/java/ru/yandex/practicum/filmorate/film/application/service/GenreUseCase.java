@@ -16,7 +16,8 @@ public class GenreUseCase {
     private final GenreService genreService;
 
     public Genre add(Genre genre) {
-        return genreStorage.add(genre);
+        genreStorage.add(genre);
+        return genre;
     }
 
     public Genre getById(Long id) {
@@ -31,8 +32,8 @@ public class GenreUseCase {
         return genreStorage.getById(id).isPresent();
     }
 
-    public Genre update(Long id) {
-        Genre genre = genreStorage.getById(id).orElseThrow(GenreNotFoundException::new);
+    public Genre update(Genre genre) {
+        genreStorage.getById(genre.getId()).orElseThrow(GenreNotFoundException::new);
         genreService.update(genre);
         return genre;
     }

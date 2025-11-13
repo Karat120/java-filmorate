@@ -26,10 +26,9 @@ public class H2GenreStorage extends BaseRepository<Genre> implements GenreStorag
     }
 
     @Override
-    public Genre add(Genre genre) {
+    public void add(Genre genre) {
         Long id = insert(INSERT_SQL, genre.getName());
         genre.setId(id);
-        return genre;
     }
 
     @Override
@@ -43,9 +42,8 @@ public class H2GenreStorage extends BaseRepository<Genre> implements GenreStorag
     }
 
     @Override
-    public Genre update(Genre genre) {
+    public void update(Genre genre) {
         update(UPDATE_SQL, genre.getName(), genre.getId());
-        return genre;
     }
 
     @Override
