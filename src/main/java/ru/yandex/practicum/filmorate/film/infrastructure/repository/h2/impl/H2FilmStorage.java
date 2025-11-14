@@ -3,15 +3,16 @@ package ru.yandex.practicum.filmorate.film.infrastructure.repository.h2.impl;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.shared.infrastructure.repository.BaseRepository;
 import ru.yandex.practicum.filmorate.film.domain.model.Film;
 import ru.yandex.practicum.filmorate.film.domain.repository.FilmStorage;
 import ru.yandex.practicum.filmorate.film.infrastructure.repository.h2.mapper.FilmMapper;
+import ru.yandex.practicum.filmorate.shared.infrastructure.repository.BaseRepository;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Primary
@@ -56,8 +57,8 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             """;
 
     private static final String INSERT_QUERY = """
-            INSERT INTO film(name, description, release_date, duration)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO film(name, description, release_date, duration, mpa_id)
+            VALUES (?, ?, ?, ?, ?)
             """;
 
     private static final String UPDATE_QUERY = """
@@ -65,7 +66,8 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             SET name = ?,
                 description = ?,
                 release_date = ?,
-                duration = ?
+                duration = ?,
+                mpa_id= ?
             WHERE id = ?
             """;
 
@@ -87,9 +89,14 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
-                film.getDuration().toSeconds()
+                film.getDuration().toMinutes(),
+                film.getMpa()
         );
         film.setId(id);
+
+        updateFilmLikes(film);
+
+        updateFilmGenres(film);
     }
 
     @Override
@@ -120,14 +127,51 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
-                film.getDuration().toSeconds(),
+                film.getDuration().toMinutes(),
+                film.getMpa(),
                 film.getId()
         );
+
+        updateFilmLikes(film);
+
+        updateFilmGenres(film);
     }
 
     @Override
     public void delete(Long id) {
         delete(DELETE_QUERY, id);
+    }
+
+    private void updateFilmLikes(Film film) {
+        // Удаляем все текущие лайки фильма
+        delete("DELETE FROM film_like WHERE film_id = ?", film.getId());
+
+        // Добавляем новые лайки
+        if (film.getUserLikes() != null && !film.getUserLikes().isEmpty()) {
+            List<Object[]> args = film.getUserLikes().stream()
+                    .map(userId -> new Object[]{film.getId(), userId})
+                    .collect(Collectors.toList());
+
+            jdbc.batchUpdate(
+                    "INSERT INTO film_like (film_id, user_id) VALUES (?, ?)",
+                    args
+            );
+        }
+    }
+
+    private void updateFilmGenres(Film film) {
+        delete("DELETE FROM film_genre WHERE film_id = ?", film.getId());
+
+        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
+            List<Object[]> args = film.getGenres().stream()
+                    .map(genreId -> new Object[]{film.getId(), genreId})
+                    .collect(Collectors.toList());
+
+            jdbc.batchUpdate(
+                    "INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)",
+                    args
+            );
+        }
     }
 
     private void loadFilmData(Film film) {
