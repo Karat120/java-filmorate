@@ -4,8 +4,8 @@ import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class Film {
@@ -22,9 +22,9 @@ public class Film {
 
     private Long mpa;
 
-    private Set<Long> userLikes = new HashSet<>();
+    private List<Long> userLikes = new ArrayList<>();
 
-    private Set<Long> genres = new HashSet<>();
+    private List<Long> genres = new ArrayList<>();
 
     public void likeBy(Long userId) {
         if (isLikedBy(userId)) {

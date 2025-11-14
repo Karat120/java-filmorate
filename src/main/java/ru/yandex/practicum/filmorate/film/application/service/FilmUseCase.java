@@ -94,6 +94,6 @@ public class FilmUseCase {
     private FilmView toView(Film film) {
         return FilmMapper.toView(film,
                 new MpaReference(film.getMpa()),
-                film.getGenres().stream().map(GenreReference::new).collect(Collectors.toSet()));
+                film.getGenres().stream().map(GenreReference::new).toList());
     }
 }

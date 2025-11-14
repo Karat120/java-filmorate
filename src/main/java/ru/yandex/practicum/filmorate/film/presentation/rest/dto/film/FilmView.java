@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.Duratio
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 public record FilmView(
         Long id,
@@ -21,6 +21,6 @@ public record FilmView(
         Duration duration,
         MpaReference mpa,
         Long likeCount,
-        Set<GenreReference> genres
+        List<GenreReference> genres
 ) {
 }

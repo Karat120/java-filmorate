@@ -13,7 +13,7 @@ import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.Duratio
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 public record UpdateFilmRequest(
         Long id,
@@ -28,7 +28,7 @@ public record UpdateFilmRequest(
         @PositiveDuration
         Duration duration,
         MpaReference mpa,
-        Set<Long> userLikes,
-        Set<GenreReference> genres
+        List<Long> userLikes,
+        List<GenreReference> genres
 ) {
 }

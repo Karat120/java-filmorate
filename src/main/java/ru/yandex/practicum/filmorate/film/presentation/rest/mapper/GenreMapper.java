@@ -6,8 +6,7 @@ import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreView;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.UpdateGenreRequest;
 
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class GenreMapper {
 
@@ -38,19 +37,19 @@ public class GenreMapper {
     }
 
     // Collection<Genre> -> Set<GenreView>
-    public static Set<GenreView> toViewSet(Collection<Genre> genres) {
+    public static List<GenreView> toViewList(Collection<Genre> genres) {
         if (genres == null) {
-            return Set.of();
+            return List.of();
         }
         return genres.stream()
                 .map(GenreMapper::toView)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     // Set<Long> genreIds -> Set<Genre> (для создания объектов Genre только с ID)
-    public static Set<Genre> toDomainSet(Set<Long> genreIds) {
+    public static List<Genre> toDomainList(List<Long> genreIds) {
         if (genreIds == null) {
-            return Set.of();
+            return List.of();
         }
         return genreIds.stream()
                 .map(genreId -> {
@@ -58,17 +57,17 @@ public class GenreMapper {
                     genre.setId(genreId);
                     return genre;
                 })
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     // Set<Genre> -> Set<Long> (извлечение ID из жанров)
-    public static Set<Long> toIdSet(Set<Genre> genres) {
+    public static List<Long> toIdList(List<Genre> genres) {
         if (genres == null) {
-            return Set.of();
+            return List.of();
         }
         return genres.stream()
                 .map(Genre::getId)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     // Создание Genre только с ID (для связей)

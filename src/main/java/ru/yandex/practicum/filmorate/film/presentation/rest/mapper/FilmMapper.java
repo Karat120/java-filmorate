@@ -7,8 +7,7 @@ import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmR
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreReference;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaReference;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class FilmMapper {
     // CreateFilmRequest -> Film
@@ -21,7 +20,7 @@ public class FilmMapper {
         film.setMpa(dto.mpa().id());
 
         if (dto.genres() != null) {
-            film.setGenres(dto.genres().stream().map(GenreReference::id).collect(Collectors.toSet()));
+            film.setGenres(dto.genres().stream().map(GenreReference::id).toList());
         }
 
         return film;
@@ -42,14 +41,14 @@ public class FilmMapper {
         }
 
         if (dto.genres() != null) {
-            film.setGenres(dto.genres().stream().map(GenreReference::id).collect(Collectors.toSet()));
+            film.setGenres(dto.genres().stream().map(GenreReference::id).toList());
         }
 
         return film;
     }
 
     // Film -> FilmView
-    public static FilmView toView(Film film, MpaReference mpaReference, Set<GenreReference> genreReferences) {
+    public static FilmView toView(Film film, MpaReference mpaReference, List<GenreReference> genreReferences) {
         return new FilmView(
                 film.getId(),
                 film.getName(),

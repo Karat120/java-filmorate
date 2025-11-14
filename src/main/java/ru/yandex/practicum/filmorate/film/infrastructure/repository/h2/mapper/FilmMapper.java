@@ -7,8 +7,8 @@ import ru.yandex.practicum.filmorate.film.domain.model.Film;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class FilmMapper implements RowMapper<Film> {
@@ -28,18 +28,18 @@ public class FilmMapper implements RowMapper<Film> {
         var duration = Duration.ofSeconds(rs.getLong("duration"));
         film.setDuration(duration);
 
-        film.setGenres(new HashSet<>());
-        film.setUserLikes(new HashSet<>());
+        film.setGenres(new ArrayList<>());
+        film.setUserLikes(new ArrayList<>());
         return film;
     }
 
-    public static void loadGenres(Film film, Set<Long> genreIds) {
+    public static void loadGenres(Film film, List<Long> genreIds) {
         film.setGenres(genreIds);
     }
 
     public static void loadMpa(Film film, Long mpaId) {film.setMpa(mpaId);}
 
-    public static void loadLikes(Film film, Set<Long> likeIds) {
+    public static void loadLikes(Film film, List<Long> likeIds) {
         film.setUserLikes(likeIds);
     }
 }

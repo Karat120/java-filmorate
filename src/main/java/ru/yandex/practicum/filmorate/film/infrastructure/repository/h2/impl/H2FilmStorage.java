@@ -8,10 +8,8 @@ import ru.yandex.practicum.filmorate.film.domain.repository.FilmStorage;
 import ru.yandex.practicum.filmorate.film.infrastructure.repository.h2.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.shared.infrastructure.repository.BaseRepository;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -75,7 +73,6 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
             DELETE FROM film
             WHERE id = ?
             """;
-
 
 
     public H2FilmStorage(JdbcTemplate jdbc, FilmMapper mapper) {
@@ -181,12 +178,12 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
     }
 
     private void loadGenres(Film film) {
-        Set<Long> genreIds = new HashSet<>(jdbc.queryForList(FIND_GENRES_QUERY, Long.class, film.getId()));
+        var genreIds = jdbc.queryForList(FIND_GENRES_QUERY, Long.class, film.getId());
         FilmMapper.loadGenres(film, genreIds);
     }
 
     private void loadLikes(Film film) {
-        Set<Long> likeIds = new HashSet<>(jdbc.queryForList(FIND_LIKES_QUERY, Long.class, film.getId()));
+        var likeIds = jdbc.queryForList(FIND_LIKES_QUERY, Long.class, film.getId());
         FilmMapper.loadLikes(film, likeIds);
     }
 
