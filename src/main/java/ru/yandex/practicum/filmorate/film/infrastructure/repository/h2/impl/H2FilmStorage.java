@@ -144,7 +144,7 @@ public class H2FilmStorage extends BaseRepository<Film> implements FilmStorage {
         delete("DELETE FROM film_like WHERE film_id = ?", film.getId());
 
         // Добавляем новые лайки
-        if (film.getUserLikes() != null && !film.getUserLikes().isEmpty()) {
+        if (film.getUserLikes() != null) {
             List<Object[]> args = film.getUserLikes().stream()
                     .map(userId -> new Object[]{film.getId(), userId})
                     .collect(Collectors.toList());
