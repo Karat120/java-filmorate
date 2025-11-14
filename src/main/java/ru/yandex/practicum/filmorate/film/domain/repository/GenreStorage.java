@@ -12,6 +12,8 @@ public interface GenreStorage {
 
     List<Genre> getAll();
 
+    List<Genre> getAllByIds(List<Long> ids);
+
     void update(Genre genre);
 
     void delete(Long id);
