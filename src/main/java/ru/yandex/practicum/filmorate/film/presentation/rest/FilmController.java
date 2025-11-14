@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.film.domain.model.Film;
 import ru.yandex.practicum.filmorate.film.application.service.FilmUseCase;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.CreateFilmRequest;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.FilmView;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmRequest;
 
 import java.util.List;
 
@@ -26,15 +28,15 @@ public class FilmController {
     private final FilmUseCase filmUseCase;
 
     @PostMapping
-    public Film createFilm(@Valid @RequestBody Film film) {
-        filmUseCase.create(film);
+    public FilmView createFilm(@Valid @RequestBody CreateFilmRequest request) {
+        var film = filmUseCase.create(request);
 
-        log.info("Film created: id={}, name={}", film.getId(), film.getName());
+        log.info("Film created: name={}", film.id(), film.name());
         return film;
     }
 
     @GetMapping
-    public List<Film> getAllFilms() {
+    public List<FilmView> getAllFilms() {
         var films = filmUseCase.getAll();
 
         log.debug("Retrieving all films (total={})", films.size());
@@ -42,21 +44,21 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> getTopNFilmsByLikes(@RequestParam int count) {
+    public List<FilmView> getTopNFilmsByLikes(@RequestParam int count) {
         return filmUseCase.getTopNFilmsByLikes(count);
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {
-        filmUseCase.update(film);
+    public FilmView updateFilm(@Valid @RequestBody UpdateFilmRequest request) {
+        var film = filmUseCase.update(request);
 
-        log.info("Film updated: id={}, name={}", film.getId(), film.getName());
+        log.info("Film updated: id={}, name={}", film.id(), film.name());
         return film;
     }
 
     @DeleteMapping("/{id}")
     public void deleteFilm(@PathVariable Long id) {
-        filmUseCase.deleteById(id);
+        filmUseCase.delete(id);
 
         log.info("Film deleted: id={}", id);
     }
