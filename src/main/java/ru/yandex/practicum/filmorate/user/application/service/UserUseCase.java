@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.user.application.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.user.domain.exception.FriendshipViolationException;
 import ru.yandex.practicum.filmorate.user.domain.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.user.domain.model.User;
 import ru.yandex.practicum.filmorate.user.domain.model.User.FriendshipStatus;
@@ -50,7 +51,11 @@ public class UserUseCase {
         var user = getById(thisId);
         getById(otherId);
 
-        user.addFriend(otherId);
+        try {
+            user.addFriend(otherId);
+        } catch (FriendshipViolationException ex) {
+            return user;
+        }
 
         update(user);
 
@@ -61,8 +66,11 @@ public class UserUseCase {
         var user = getById(thisId);
         getById(otherId);
 
-        user.removeFriend(otherId);
-
+        try{
+            user.removeFriend(otherId);
+        } catch (FriendshipViolationException ex) {
+            return user;
+        }
         update(user);
 
         return user;

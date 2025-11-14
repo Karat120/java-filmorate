@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.user.domain.exception.FriendshipViolationException;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -49,10 +50,10 @@ public class User {
 
     public void addFriend(Long otherUserId) {
         if (Objects.equals(otherUserId, this.id)) {
-            throw new IllegalArgumentException("User cannot be a friend to himself");
+            throw new FriendshipViolationException("User cannot be a friend to himself");
         }
         if (hasFriend(otherUserId)) {
-            throw new IllegalArgumentException(
+            throw new FriendshipViolationException(
                     "The user with id=%d is already a friend of the user with id=%d".formatted(otherUserId, this.id));
         }
         friends.add(otherUserId);
@@ -60,10 +61,10 @@ public class User {
 
     public void removeFriend(Long otherUserId) {
         if (Objects.equals(otherUserId, this.id)) {
-            throw new IllegalArgumentException("User cannot remove himself from the friends list");
+            throw new FriendshipViolationException("User cannot remove himself from the friends list");
         }
         if (!hasFriend(otherUserId)) {
-            throw new IllegalArgumentException(
+            throw new FriendshipViolationException(
                     "The user with id=%d is not a friend of the user with id=%d".formatted(otherUserId, this.id));
         }
         friends.remove(otherUserId);
