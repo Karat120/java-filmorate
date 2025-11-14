@@ -3,8 +3,13 @@ package ru.yandex.practicum.filmorate.film.application.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.film.domain.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.film.domain.exception.GenreNotFoundException;
+import ru.yandex.practicum.filmorate.film.domain.exception.MpaNotFoundException;
 import ru.yandex.practicum.filmorate.film.domain.model.Film;
+import ru.yandex.practicum.filmorate.film.domain.model.Genre;
 import ru.yandex.practicum.filmorate.film.domain.repository.FilmStorage;
+import ru.yandex.practicum.filmorate.film.domain.repository.GenreStorage;
+import ru.yandex.practicum.filmorate.film.domain.repository.MpaStorage;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.CreateFilmRequest;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.FilmView;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmRequest;
@@ -22,9 +27,17 @@ import java.util.stream.Collectors;
 public class FilmUseCase {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
+    private final MpaStorage mpaStorage;
+    private final GenreStorage genreStorage;
 
     public FilmView create(CreateFilmRequest film) {
         var newFilm = FilmMapper.toDomain(film);
+
+        mpaStorage.getById(newFilm.getMpa()).orElseThrow(MpaNotFoundException::new);
+        var genres = genreStorage.getAll().stream().map(Genre::getId).collect(Collectors.toSet());
+        if (newFilm.getGenres().stream().anyMatch(genre -> !genres.contains(genre))) {
+            throw new GenreNotFoundException();
+        }
 
         filmStorage.add(newFilm);
 
@@ -79,7 +92,6 @@ public class FilmUseCase {
     }
 
     private FilmView toView(Film film) {
-
         return FilmMapper.toView(film,
                 new MpaReference(film.getMpa()),
                 film.getGenres().stream().map(GenreReference::new).collect(Collectors.toSet()));
