@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import ru.yandex.practicum.filmorate.film.presentation.annotation.NotBeforeCinemaBirthday;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreReference;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaReference;
 import ru.yandex.practicum.filmorate.shared.presentation.annotation.PositiveDuration;
 import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.DurationMinutesDeserializer;
 import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.DurationMinutesSerializer;
@@ -23,9 +25,9 @@ public record CreateFilmRequest(
         @JsonSerialize(using = DurationMinutesSerializer.class)
         @JsonDeserialize(using = DurationMinutesDeserializer.class)
         @PositiveDuration
-        Duration durationMinutes,
-        Long mpaRating,
-        Set<Long> genres
+        Duration duration,
+        MpaReference mpa,
+        Set<GenreReference> genres
 
 ) {
 }

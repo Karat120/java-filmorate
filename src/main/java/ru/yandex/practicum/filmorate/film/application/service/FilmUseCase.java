@@ -5,26 +5,23 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.film.domain.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.film.domain.model.Film;
 import ru.yandex.practicum.filmorate.film.domain.repository.FilmStorage;
-import ru.yandex.practicum.filmorate.film.domain.repository.GenreStorage;
-import ru.yandex.practicum.filmorate.film.domain.repository.MpaStorage;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.CreateFilmRequest;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.FilmView;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmRequest;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreReference;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaReference;
 import ru.yandex.practicum.filmorate.film.presentation.rest.mapper.FilmMapper;
-import ru.yandex.practicum.filmorate.film.presentation.rest.mapper.GenreMapper;
-import ru.yandex.practicum.filmorate.film.presentation.rest.mapper.MpaMapper;
 import ru.yandex.practicum.filmorate.user.domain.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.user.domain.repository.UserStorage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class FilmUseCase {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
-    private MpaStorage mpaStorage;
-    private GenreStorage genreStorage;
 
     public FilmView create(CreateFilmRequest film) {
         var newFilm = FilmMapper.toDomain(film);
@@ -83,9 +80,8 @@ public class FilmUseCase {
 
     private FilmView toView(Film film) {
 
-        var mpaRating = mpaStorage.getById(film.getMpa()).orElseThrow();
-        var genres = genreStorage.getAllByIds((List<Long>) film.getGenres());
-
-        return FilmMapper.toView(film, MpaMapper.toView(mpaRating), GenreMapper.toViewSet(genres));
+        return FilmMapper.toView(film,
+                new MpaReference(film.getMpa()),
+                film.getGenres().stream().map(GenreReference::new).collect(Collectors.toSet()));
     }
 }

@@ -4,10 +4,11 @@ import ru.yandex.practicum.filmorate.film.domain.model.Film;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.CreateFilmRequest;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.FilmView;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmRequest;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreView;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaView;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreReference;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaReference;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FilmMapper {
     // CreateFilmRequest -> Film
@@ -16,11 +17,11 @@ public class FilmMapper {
         film.setName(dto.name());
         film.setDescription(dto.description());
         film.setReleaseDate(dto.releaseDate());
-        film.setDuration(dto.durationMinutes());
-        film.setMpa(dto.mpaRating());
+        film.setDuration(dto.duration());
+        film.setMpa(dto.mpa().id());
 
         if (dto.genres() != null) {
-            film.setGenres(dto.genres());
+            film.setGenres(dto.genres().stream().map(GenreReference::id).collect(Collectors.toSet()));
         }
 
         return film;
@@ -33,31 +34,31 @@ public class FilmMapper {
         film.setName(dto.name());
         film.setDescription(dto.description());
         film.setReleaseDate(dto.releaseDate());
-        film.setDuration(dto.durationMinutes());
-        film.setMpa(dto.mpaRating());
+        film.setDuration(dto.duration());
+        film.setMpa(dto.mpa().id());
 
         if (dto.userLikes() != null) {
             film.setUserLikes(dto.userLikes());
         }
 
         if (dto.genres() != null) {
-            film.setGenres(dto.genres());
+            film.setGenres(dto.genres().stream().map(GenreReference::id).collect(Collectors.toSet()));
         }
 
         return film;
     }
 
     // Film -> FilmView
-    public static FilmView toView(Film film, MpaView mpaView, Set<GenreView> genreViews) {
+    public static FilmView toView(Film film, MpaReference mpaReference, Set<GenreReference> genreReferences) {
         return new FilmView(
                 film.getId(),
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                mpaView,
+                mpaReference,
                 (long) film.countLikes(),
-                genreViews
+                genreReferences
         );
     }
 }
