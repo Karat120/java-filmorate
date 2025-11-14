@@ -46,6 +46,28 @@ public class UserUseCase {
         userStorage.delete(id);
     }
 
+    public User add(Long thisId, Long otherId) {
+        var user = getById(thisId);
+        getById(otherId);
+
+        user.addFriend(otherId);
+
+        update(user);
+
+        return user;
+    }
+
+    public User remove(Long thisId, Long otherId) {
+        var user = getById(thisId);
+        getById(otherId);
+
+        user.removeFriend(otherId);
+
+        update(user);
+
+        return user;
+    }
+
     public void becomeFriends(Long firstUserId, Long secondUserId) {
         var firstUser = getById(firstUserId);
         var secondUser = getById(secondUserId);

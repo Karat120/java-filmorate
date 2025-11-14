@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.shared.infrastructure.repository.BaseRepository;
-import ru.yandex.practicum.filmorate.user.infrastructure.repository.h2.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.user.domain.model.User;
 import ru.yandex.practicum.filmorate.user.domain.repository.UserStorage;
+import ru.yandex.practicum.filmorate.user.infrastructure.repository.h2.mapper.UserMapper;
 
 import java.util.HashSet;
 import java.util.List;
@@ -79,6 +79,7 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
                 user.getBirthday()
         );
         user.setId(id);
+        updateFriendship(user);
     }
 
     @Override
@@ -121,6 +122,8 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
                 user.getBirthday(),
                 user.getId()
         );
+
+        updateFriendship(user);
     }
 
     @Override
@@ -132,6 +135,19 @@ public class H2UserStorage extends BaseRepository<User> implements UserStorage {
     public boolean existsById(Long id) {
         Integer count = jdbc.queryForObject(EXISTS_BY_ID_QUERY, Integer.class, id);
         return count != null && count > 0;
+    }
+
+    private void updateFriendship(User user) {
+        if (user.getFriends() != null) {
+            delete("DELETE FROM friendship WHERE user_id = ?", user.getId());
+            List<Object[]> args = user.getFriends().stream()
+                    .map(friendId -> new Object[]{user.getId(), friendId})
+                    .collect(Collectors.toList());
+
+            jdbc.batchUpdate(
+                    "INSERT INTO friendship (user_id, friend_id) VALUES (?, ?)",
+                    args);
+        }
     }
 
     private void loadFriends(User user) {

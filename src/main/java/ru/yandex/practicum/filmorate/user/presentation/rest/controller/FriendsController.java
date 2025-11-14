@@ -29,12 +29,12 @@ public class FriendsController {
     }
 
     @PutMapping("/{otherId}")
-    public void add(@PathVariable Long thisId, @PathVariable Long otherId) {
-        userUseCase.becomeFriends(thisId, otherId);
+    public User add(@PathVariable Long thisId, @PathVariable Long otherId) {
+        return userUseCase.add(thisId, otherId);
     }
 
     @DeleteMapping("/{otherId}")
-    public void remove(@PathVariable Long thisId, @PathVariable Long otherId) {
-        userUseCase.breakFriendship(thisId, otherId);
+    public User remove(@PathVariable Long thisId, @PathVariable Long otherId) {
+        return userUseCase.remove(thisId, otherId);
     }
 }
