@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.user.presentation.rest;
+package ru.yandex.practicum.filmorate.user.presentation.rest.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
