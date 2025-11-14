@@ -35,6 +35,9 @@ public class UserUseCase {
     }
 
     public User update(User user) {
+        if (!userStorage.existsById(user.getId())) {
+            throw new UserNotFoundException();
+        }
         userStorage.update(user);
         return user;
     }
@@ -66,7 +69,7 @@ public class UserUseCase {
         var user = getById(thisId);
         getById(otherId);
 
-        try{
+        try {
             user.removeFriend(otherId);
         } catch (FriendshipViolationException ex) {
             return user;
