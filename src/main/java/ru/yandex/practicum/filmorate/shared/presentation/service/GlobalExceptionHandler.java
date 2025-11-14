@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.yandex.practicum.filmorate.film.domain.exception.GenreNotFoundException;
+import ru.yandex.practicum.filmorate.film.domain.exception.MpaNotFoundException;
 import ru.yandex.practicum.filmorate.shared.presentation.dto.ErrorResponseDto;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,6 +68,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleFilmNotFoundException(FilmNotFoundException ex,
                                                                         HttpServletRequest request) {
         log.warn("Film not found: {}", ex.getMessage());
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MpaNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleMpaNotFoundException(MpaNotFoundException ex,
+                                                                        HttpServletRequest request) {
+        log.warn("Mpa not found: {}", ex.getMessage());
+        ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GenreNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleGenreFoundException(GenreNotFoundException ex,
+                                                                        HttpServletRequest request) {
+        log.warn("Genre not found: {}", ex.getMessage());
         ErrorResponseDto body = buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
