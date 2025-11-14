@@ -25,7 +25,7 @@ public class FilmMapper implements RowMapper<Film> {
             film.setReleaseDate(releaseDate.toLocalDate());
         }
 
-        var duration = Duration.ofSeconds(rs.getLong("duration"));
+        var duration = Duration.ofMinutes(rs.getLong("duration"));
         film.setDuration(duration);
 
         film.setGenres(new ArrayList<>());
