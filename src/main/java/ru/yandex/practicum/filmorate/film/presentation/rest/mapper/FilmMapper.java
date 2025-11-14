@@ -5,7 +5,8 @@ import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.CreateFilmR
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.FilmView;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmRequest;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreReference;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaReference;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreView;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaView;
 
 import java.util.List;
 
@@ -48,16 +49,16 @@ public class FilmMapper {
     }
 
     // Film -> FilmView
-    public static FilmView toView(Film film, MpaReference mpaReference, List<GenreReference> genreReferences) {
+    public static FilmView toView(Film film, MpaView mpaViews, List<GenreView> genreViews) {
         return new FilmView(
                 film.getId(),
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                mpaReference,
+                mpaViews,
                 (long) film.countLikes(),
-                genreReferences
+                genreViews
         );
     }
 }

@@ -43,6 +43,14 @@ public class FilmController {
         return films;
     }
 
+    @GetMapping("/{id}")
+    public FilmView getFilmById(@PathVariable Long id) {
+        var film = filmUseCase.getById(id);
+
+        log.debug("Retrieving film by id: id={}", id);
+        return film;
+    }
+
     @GetMapping("/popular")
     public List<FilmView> getTopNFilmsByLikes(@RequestParam int count) {
         return filmUseCase.getTopNFilmsByLikes(count);

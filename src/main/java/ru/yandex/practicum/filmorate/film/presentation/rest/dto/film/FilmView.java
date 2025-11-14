@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.film.presentation.rest.dto.film;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreReference;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaReference;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreView;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaView;
 import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.DurationMinutesDeserializer;
 import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.DurationMinutesSerializer;
 
@@ -19,8 +19,8 @@ public record FilmView(
         @JsonSerialize(using = DurationMinutesSerializer.class)
         @JsonDeserialize(using = DurationMinutesDeserializer.class)
         Duration duration,
-        MpaReference mpa,
+        MpaView mpa,
         Long likeCount,
-        List<GenreReference> genres
+        List<GenreView> genres
 ) {
 }

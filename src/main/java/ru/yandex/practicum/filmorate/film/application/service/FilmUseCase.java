@@ -13,9 +13,9 @@ import ru.yandex.practicum.filmorate.film.domain.repository.MpaStorage;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.CreateFilmRequest;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.FilmView;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmRequest;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreReference;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaReference;
 import ru.yandex.practicum.filmorate.film.presentation.rest.mapper.FilmMapper;
+import ru.yandex.practicum.filmorate.film.presentation.rest.mapper.GenreMapper;
+import ru.yandex.practicum.filmorate.film.presentation.rest.mapper.MpaMapper;
 import ru.yandex.practicum.filmorate.user.domain.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.user.domain.repository.UserStorage;
 
@@ -92,8 +92,16 @@ public class FilmUseCase {
     }
 
     private FilmView toView(Film film) {
-        return FilmMapper.toView(film,
-                new MpaReference(film.getMpa()),
-                film.getGenres().stream().map(GenreReference::new).toList());
+        var mpaView = mpaStorage.getById(film.getMpa())
+                .map(MpaMapper::toView)
+                .orElse(null);
+
+        var genreViews = genreStorage.getAllByIds(film.getGenres())
+                .stream()
+                .map(GenreMapper::toView)
+                .toList();
+
+        return FilmMapper.toView(film, mpaView, genreViews);
+
     }
 }
