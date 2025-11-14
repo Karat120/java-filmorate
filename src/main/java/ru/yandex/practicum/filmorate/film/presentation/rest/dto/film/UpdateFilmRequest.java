@@ -9,6 +9,8 @@ import ru.yandex.practicum.filmorate.shared.presentation.annotation.PositiveDura
 import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.DurationMinutesDeserializer;
 import ru.yandex.practicum.filmorate.shared.presentation.service.jackson.DurationMinutesSerializer;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Set;
 
 public record UpdateFilmRequest(
@@ -18,11 +20,11 @@ public record UpdateFilmRequest(
         @Size(max = 200, message = "The film description must not exceed 200 characters")
         String description,
         @NotBeforeCinemaBirthday
-        String releaseDate,
+        LocalDate releaseDate,
         @JsonSerialize(using = DurationMinutesSerializer.class)
         @JsonDeserialize(using = DurationMinutesDeserializer.class)
         @PositiveDuration
-        Long durationMinutes,
+        Duration durationMinutes,
         Long mpaRating,
         Set<Long> userLikes,
         Set<Long> genres
