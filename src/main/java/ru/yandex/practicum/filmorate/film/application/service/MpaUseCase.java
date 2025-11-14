@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.film.domain.exception.MpaNotFoundException;
 import ru.yandex.practicum.filmorate.film.domain.model.Mpa;
 import ru.yandex.practicum.filmorate.film.domain.repository.MpaStorage;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaView;
+import ru.yandex.practicum.filmorate.film.presentation.rest.mapper.MpaMapper;
 
 import java.util.List;
 
@@ -18,22 +20,24 @@ public class MpaUseCase {
         return mpa;
     }
 
-    public Mpa getById(Long id) {
-        return mpaStorage.getById(id).orElseThrow(MpaNotFoundException::new);
+    public MpaView getById(Long id) {
+        var mpa = mpaStorage.getById(id).orElseThrow(MpaNotFoundException::new);
+        return MpaMapper.toView(mpa);
     }
 
-    public List<Mpa> getAll() {
-        return mpaStorage.getAll();
+    public List<MpaView> getAll() {
+        var mpas = mpaStorage.getAll();
+        return mpas.stream().map(MpaMapper::toView).toList();
     }
 
     public boolean existsById(Long id) {
         return mpaStorage.getById(id).isPresent();
     }
 
-    public Mpa update(Mpa mpa) {
+    public MpaView update(Mpa mpa) {
         mpaStorage.getById(mpa.getId()).orElseThrow(MpaNotFoundException::new);
         mpaStorage.update(mpa);
-        return mpa;
+        return MpaMapper.toView(mpa);
     }
 
     public void delete(Long id) {
