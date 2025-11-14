@@ -27,6 +27,5 @@ public record CreateFilmRequest(
         Long mpaRating,
         Set<Long> genres
 
-        // TODO: 14.11.2025 Исправить валидацию аннотациями
 ) {
 }

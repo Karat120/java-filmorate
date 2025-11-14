@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.film.application.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.film.domain.exception.MpaRatingNotFoundException;
-import ru.yandex.practicum.filmorate.film.domain.model.MpaRating;
+import ru.yandex.practicum.filmorate.film.domain.exception.MpaNotFoundException;
+import ru.yandex.practicum.filmorate.film.domain.model.Mpa;
 import ru.yandex.practicum.filmorate.film.domain.repository.MpaStorage;
 
 import java.util.List;
@@ -13,16 +13,16 @@ import java.util.List;
 public class MpaUseCase {
     private final MpaStorage mpaStorage;
 
-    public MpaRating add(MpaRating mpa) {
+    public Mpa add(Mpa mpa) {
         mpaStorage.add(mpa);
         return mpa;
     }
 
-    public MpaRating getById(Long id) {
-        return mpaStorage.getById(id).orElseThrow(MpaRatingNotFoundException::new);
+    public Mpa getById(Long id) {
+        return mpaStorage.getById(id).orElseThrow(MpaNotFoundException::new);
     }
 
-    public List<MpaRating> getAll() {
+    public List<Mpa> getAll() {
         return mpaStorage.getAll();
     }
 
@@ -30,14 +30,14 @@ public class MpaUseCase {
         return mpaStorage.getById(id).isPresent();
     }
 
-    public MpaRating update(MpaRating mpa) {
-        mpaStorage.getById(mpa.getId()).orElseThrow(MpaRatingNotFoundException::new);
+    public Mpa update(Mpa mpa) {
+        mpaStorage.getById(mpa.getId()).orElseThrow(MpaNotFoundException::new);
         mpaStorage.update(mpa);
         return mpa;
     }
 
     public void delete(Long id) {
-        mpaStorage.getById(id).orElseThrow(MpaRatingNotFoundException::new);
+        mpaStorage.getById(id).orElseThrow(MpaNotFoundException::new);
         mpaStorage.delete(id);
     }
 }

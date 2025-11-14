@@ -37,7 +37,7 @@ public class FilmMapper implements RowMapper<Film> {
         film.setGenres(genreIds);
     }
 
-    public static void loadMpa(Film film, Long mpaId) {film.setMpaRating(mpaId);}
+    public static void loadMpa(Film film, Long mpaId) {film.setMpa(mpaId);}
 
     public static void loadLikes(Film film, Set<Long> likeIds) {
         film.setUserLikes(likeIds);

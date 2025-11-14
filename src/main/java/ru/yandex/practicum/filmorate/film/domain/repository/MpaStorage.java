@@ -1,18 +1,18 @@
 package ru.yandex.practicum.filmorate.film.domain.repository;
 
-import ru.yandex.practicum.filmorate.film.domain.model.MpaRating;
+import ru.yandex.practicum.filmorate.film.domain.model.Mpa;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MpaStorage {
-    void add(MpaRating mpaRating);
+    void add(Mpa mpa);
 
-    Optional<MpaRating> getById(Long id);
+    Optional<Mpa> getById(Long id);
 
-    List<MpaRating> getAll();
+    List<Mpa> getAll();
 
-    void update(MpaRating mpa);
+    void update(Mpa mpa);
 
     void delete(Long id);
 }

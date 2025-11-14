@@ -20,7 +20,7 @@ public class Film {
 
     private Duration duration;
 
-    private Long mpaRating;
+    private Long mpa;
 
     private Set<Long> userLikes = new HashSet<>();
 

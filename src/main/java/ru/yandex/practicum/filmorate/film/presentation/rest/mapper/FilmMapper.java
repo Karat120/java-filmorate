@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.CreateFilmR
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.FilmView;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.film.UpdateFilmRequest;
 import ru.yandex.practicum.filmorate.film.presentation.rest.dto.genre.GenreView;
-import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaRatingView;
+import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaView;
 
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class FilmMapper {
         film.setDescription(dto.description());
         film.setReleaseDate(dto.releaseDate());
         film.setDuration(dto.durationMinutes());
-        film.setMpaRating(dto.mpaRating());
+        film.setMpa(dto.mpaRating());
 
         if (dto.genres() != null) {
             film.setGenres(dto.genres());
@@ -34,7 +34,7 @@ public class FilmMapper {
         film.setDescription(dto.description());
         film.setReleaseDate(dto.releaseDate());
         film.setDuration(dto.durationMinutes());
-        film.setMpaRating(dto.mpaRating());
+        film.setMpa(dto.mpaRating());
 
         if (dto.userLikes() != null) {
             film.setUserLikes(dto.userLikes());
@@ -48,14 +48,14 @@ public class FilmMapper {
     }
 
     // Film -> FilmView
-    public static FilmView toView(Film film, MpaRatingView mpaRatingView, Set<GenreView> genreViews) {
+    public static FilmView toView(Film film, MpaView mpaView, Set<GenreView> genreViews) {
         return new FilmView(
                 film.getId(),
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                mpaRatingView,
+                mpaView,
                 (long) film.countLikes(),
                 genreViews
         );

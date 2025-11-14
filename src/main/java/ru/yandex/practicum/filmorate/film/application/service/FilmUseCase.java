@@ -83,7 +83,7 @@ public class FilmUseCase {
 
     private FilmView toView(Film film) {
 
-        var mpaRating = mpaStorage.getById(film.getMpaRating()).orElseThrow();
+        var mpaRating = mpaStorage.getById(film.getMpa()).orElseThrow();
         var genres = genreStorage.getAllByIds((List<Long>) film.getGenres());
 
         return FilmMapper.toView(film, MpaMapper.toView(mpaRating), GenreMapper.toViewSet(genres));
