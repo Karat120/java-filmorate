@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.film.presentation.rest;
+package ru.yandex.practicum.filmorate.film.presentation.rest.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
