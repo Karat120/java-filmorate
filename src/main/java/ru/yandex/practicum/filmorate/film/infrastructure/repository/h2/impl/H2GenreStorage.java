@@ -56,6 +56,7 @@ public class H2GenreStorage extends BaseRepository<Genre> implements GenreStorag
 
         return findMany(query);
     }
+
     @Override
     public void update(Genre genre) {
         update(UPDATE_SQL, genre.getName(), genre.getId());

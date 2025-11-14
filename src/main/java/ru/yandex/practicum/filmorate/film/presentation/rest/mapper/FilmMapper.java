@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.film.presentation.rest.dto.mpa.MpaView;
 import java.util.List;
 
 public class FilmMapper {
-    // CreateFilmRequest -> Film
+
     public static Film toDomain(CreateFilmRequest dto) {
         Film film = new Film();
         film.setName(dto.name());
@@ -27,7 +27,6 @@ public class FilmMapper {
         return film;
     }
 
-    // UpdateFilmRequest -> Film
     public static Film toDomain(UpdateFilmRequest dto) {
         Film film = new Film();
         film.setId(dto.id());
@@ -48,17 +47,14 @@ public class FilmMapper {
         return film;
     }
 
-    // Film -> FilmView
     public static FilmView toView(Film film, MpaView mpaViews, List<GenreView> genreViews) {
-        return new FilmView(
-                film.getId(),
+        return new FilmView(film.getId(),
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
                 mpaViews,
                 (long) film.countLikes(),
-                genreViews
-        );
+                genreViews);
     }
 }

@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.film.domain.exception;
 
-public class GenreNotFoundException  extends RuntimeException{
+public class GenreNotFoundException extends RuntimeException {
     public GenreNotFoundException() {
         super("Genre not found");
     }
