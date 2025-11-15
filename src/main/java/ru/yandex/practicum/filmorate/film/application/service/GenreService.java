@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GenreUseCase {
+public class GenreService {
     private final GenreStorage genreStorage;
 
     public Genre add(Genre genre) {
