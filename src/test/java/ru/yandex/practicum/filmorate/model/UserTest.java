@@ -7,6 +7,7 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.user.domain.model.User;
 
 import java.time.LocalDate;
 import java.util.Set;
