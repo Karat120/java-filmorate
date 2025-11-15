@@ -16,21 +16,12 @@ import java.util.stream.Collectors;
 @Repository
 @Primary
 public class H2GenreStorage extends BaseRepository<Genre> implements GenreStorage {
-    private static final String INSERT_SQL = "INSERT INTO genre (name) VALUES (?)";
     private static final String SELECT_BY_ID_SQL = "SELECT id, name FROM genre WHERE id = ?";
     private static final String SELECT_ALL_SQL = "SELECT id, name FROM genre ORDER BY id";
     private static final String SELECT_ALL_BY_IDS_SQL = "SELECT id, name FROM genre WHERE id IN (%s)";
-    private static final String UPDATE_SQL = "UPDATE genre SET name = ? WHERE id = ?";
-    private static final String DELETE_SQL = "DELETE FROM genre WHERE id = ?";
 
     public H2GenreStorage(JdbcTemplate jdbc, RowMapper<Genre> mapper) {
         super(jdbc, mapper);
-    }
-
-    @Override
-    public void add(Genre genre) {
-        Long id = insert(INSERT_SQL, genre.getName());
-        genre.setId(id);
     }
 
     @Override
@@ -55,15 +46,5 @@ public class H2GenreStorage extends BaseRepository<Genre> implements GenreStorag
         String query = String.format(SELECT_ALL_BY_IDS_SQL, inClause);
 
         return findMany(query);
-    }
-
-    @Override
-    public void update(Genre genre) {
-        update(UPDATE_SQL, genre.getName(), genre.getId());
-    }
-
-    @Override
-    public void delete(Long id) {
-        delete(DELETE_SQL, id);
     }
 }
