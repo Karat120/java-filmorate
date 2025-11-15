@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class MpaUseCase {
+public class MpaService {
     private final MpaStorage mpaStorage;
 
     public Mpa add(Mpa mpa) {
